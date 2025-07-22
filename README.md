@@ -1,6 +1,5 @@
 <h1 align="center">Hi 👋, I'm GORAK!</h1>
 <h3 align="center">A passionate cyber security enthusiast</h3>
-<img src="https://www.freepik.com/premium-vector/cute-cat-working-laptop-cartoon-icon-illustration_12571292.htm#from_element=cross_selling__vector" alt="">
 
 - 💬 Ask me about **network administrator and Threat monitoring**
 
