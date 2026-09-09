@@ -36,6 +36,24 @@ HTTP traffic analysis is an important networking and cybersecurity skill used fo
 
 > **Note:** Most modern websites use HTTPS rather than plain HTTP. For this reason, an HTTP-specific lab should use an intentionally available HTTP test target or a local lab environment. Do not attempt to intercept traffic that you are not authorized to inspect.
 
+## Visual Walkthrough
+
+The following screenshots provide visual context for the Wireshark interface and HTTP traffic analysis workflow.
+
+### Wireshark Packet Capture Interface
+
+![Wireshark Packet Capture Interface](https://www.wireshark.org/docs/wsug_html_chunked/images/ws-main.png)
+
+*Official Wireshark User's Guide screenshot showing the packet list, display-filter area, packet details, and packet bytes panes.*
+
+### HTTP Request Sequence Analysis
+
+![Wireshark HTTP Request Sequence Analysis](https://www.wireshark.org/docs/wsug_html_chunked/images/ws-stats-http-requestsequences.png)
+
+*Official Wireshark documentation screenshot demonstrating HTTP request sequence analysis.*
+
+> **Portfolio note:** These are reference screenshots from the official Wireshark documentation. Project-specific screenshots from an actual lab capture can be added to demonstrate the author's own hands-on analysis.
+
 ## Exercises
 
 ### Exercise 1: Capture HTTP Traffic
