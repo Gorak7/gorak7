@@ -1,0 +1,13 @@
+order_id,order_date,region,product,quantity,unit_price,customer_segment
+1001,2026-01-05,South,Laptop,2,65000,Enterprise
+1002,2026-01-08,West,Monitor,4,15000,SMB
+1003,2026-01-15,South,Keyboard,10,1800,Consumer
+1004,2026-02-02,North,Laptop,1,68000,Enterprise
+1005,2026-02-10,East,Mouse,12,900,SMB
+1006,2026-02-18,West,Monitor,3,14500,Consumer
+1007,2026-03-03,South,Laptop,2,64000,SMB
+1008,2026-03-11,North,Keyboard,8,1700,Consumer
+1009,2026-03-19,East,Monitor,5,15200,Enterprise
+1010,2026-03-27,West,Mouse,15,850,SMB
+1011,2026-04-04,South,Monitor,4,14800,Enterprise
+1012,2026-04-14,North,Laptop,2,67500,SMB
