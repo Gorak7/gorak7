@@ -1,46 +1,59 @@
-"""Baseline time-series forecasting workflow for the project."""
+"""US healthcare demand forecasting with a simple ML baseline."""
 
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
-
-def preprocess(df: pd.DataFrame, date_col: str, value_col: str) -> pd.DataFrame:
-    """Parse dates, remove invalid rows, sort chronologically, and aggregate."""
-    data = df.copy()
-    data[date_col] = pd.to_datetime(data[date_col], errors="coerce")
-    data[value_col] = pd.to_numeric(data[value_col], errors="coerce")
-    data = data.dropna(subset=[date_col, value_col]).sort_values(date_col)
-    return data.groupby(date_col, as_index=False)[value_col].sum()
+DATA_PATH = Path("data") / "healthcare_demand.csv"
 
 
-def evaluate(actual: pd.Series, predicted: pd.Series) -> dict:
-    """Return common forecasting error metrics."""
+def evaluate(actual: pd.Series, predicted: np.ndarray) -> dict:
     mae = mean_absolute_error(actual, predicted)
     rmse = np.sqrt(mean_squared_error(actual, predicted))
-    non_zero = actual != 0
-    mape = np.mean(
-        np.abs((actual[non_zero] - predicted[non_zero]) / actual[non_zero])
-    ) * 100
+    mape = np.mean(np.abs((actual - predicted) / actual)) * 100
     return {"MAE": mae, "RMSE": rmse, "MAPE": mape}
 
 
-def naive_forecast(train: pd.Series, test: pd.Series) -> pd.Series:
-    """Simple last-observation baseline for a transparent benchmark."""
-    return pd.Series(train.iloc[-1], index=test.index, dtype=float)
+def main() -> None:
+    df = pd.read_csv(DATA_PATH, parse_dates=["date"])
+    df["patients"] = pd.to_numeric(df["patients"], errors="coerce")
+    df = df.dropna(subset=["date", "patients"]).sort_values("date")
+    df["month_index"] = np.arange(len(df))
+    df["rolling_3m"] = df["patients"].rolling(3).mean()
+
+    # Time-based split avoids data leakage from future observations.
+    split = int(len(df) * 0.8)
+    train, test = df.iloc[:split], df.iloc[split:]
+
+    model = LinearRegression()
+    model.fit(train[["month_index"]], train["patients"])
+    predictions = model.predict(test[["month_index"]])
+
+    metrics = evaluate(test["patients"], predictions)
+    print("US Healthcare Demand Forecasting")
+    for name, value in metrics.items():
+        print(f"{name}: {value:.2f}")
+
+    future = pd.DataFrame({"month_index": np.arange(len(df), len(df) + 6)})
+    future["forecast_patients"] = model.predict(future[["month_index"]])
+    print("\nNext 6-month forecast:")
+    print(future.round(0).to_string(index=False))
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(df["date"], df["patients"], label="Historical demand")
+    plt.plot(test["date"], predictions, label="ML test forecast")
+    plt.title("US Healthcare Demand Forecasting")
+    plt.xlabel("Month")
+    plt.ylabel("Patient Demand")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig("forecast.png", dpi=150)
+    plt.show()
 
 
 if __name__ == "__main__":
-    data_path = Path("data") / "data.csv"
-    if data_path.exists():
-        raw = pd.read_csv(data_path)
-        prepared = preprocess(raw, "Date", "Value")
-        split = int(len(prepared) * 0.8)
-        train = prepared.iloc[:split]
-        test = prepared.iloc[split:]
-        predictions = naive_forecast(train["Value"], test["Value"])
-        print(evaluate(test["Value"], predictions))
-    else:
-        print("Add a dataset at data/data.csv with Date and Value columns to run the baseline.")
+    main()
