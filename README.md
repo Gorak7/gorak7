@@ -14,6 +14,14 @@
 <a href="https://auth.geeksforgeeks.org/user/gorakadd9hs3" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/geeks-for-geeks.svg" alt="gorakadd9hs3" height="30" width="40" /></a>
 </p>
 
+### Assumed-Breach Adversary Simulation Lab with Detection Mapping
+
+**Python | SOC | SIEM | MITRE ATT&CK | Detection Engineering | Sigma | Splunk | Sentinel**
+
+Built a controlled assumed-breach lab using synthetic endpoint/network telemetry, ATT&CK technique mapping, deterministic detections, SOC investigation procedures, and coverage reporting.
+
+🔗 [View Project](./Assumed-Breach-Adversary-Simulation-Lab/)
+
 <h2>📊 Data Engineering & Analytics Projects</h2>
 
 ### Azure / Databricks Data Pipeline
