@@ -1,0 +1,2 @@
+# No third-party packages are required.
+# The lab uses Python's standard library.
