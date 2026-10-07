@@ -1,0 +1,15 @@
+# Splunk SPL examples for the synthetic lab telemetry.
+# Adjust field names to your actual CIM/data model before production use.
+
+index=lab sourcetype=simulated:endpoint process="powershell.exe"
+(command_line="*ExecutionPolicy Bypass*" OR command_line="*[SIMULATED]*")
+| stats count values(command_line) as command_line by host user
+| eval technique="T1059.001", tactic="Execution", severity="High"
+
+index=lab sourcetype=simulated:endpoint
+(command_line="*whoami*" OR command_line="*ipconfig*" OR process="systeminfo.exe")
+| eval technique=case(
+    like(command_line,"%whoami%"),"T1087",
+    like(command_line,"%ipconfig%"),"T1016",
+    process="systeminfo.exe","T1082")
+| stats count values(command_line) as evidence by host user technique
