@@ -1,0 +1,17 @@
+// Microsoft Sentinel / Log Analytics examples.
+ // Adapt the table and field names to your connector schema.
+
+SecurityEvent
+| where Process has "powershell.exe"
+| where CommandLine has_any ("ExecutionPolicy Bypass", "[SIMULATED]")
+| project TimeGenerated, Computer, Account, Process, CommandLine
+| extend Technique="T1059.001", Tactic="Execution", Severity="High"
+
+SecurityEvent
+| where CommandLine has_any ("whoami", "ipconfig", "systeminfo")
+| extend Technique=case(
+    CommandLine has "whoami", "T1087",
+    CommandLine has "ipconfig", "T1016",
+    CommandLine has "systeminfo", "T1082",
+    "Unknown")
+| project TimeGenerated, Computer, Account, CommandLine, Technique
