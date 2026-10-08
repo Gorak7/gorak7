@@ -1,0 +1,11 @@
+filebeat.inputs:
+  - type: filestream
+    id: soc-events
+    enabled: true
+    paths: ["/logs/soc-events.jsonl"]
+    parsers:
+      - ndjson:
+          target: ""
+          overwrite_keys: true
+output.logstash:
+  hosts: ["logstash:5044"]
