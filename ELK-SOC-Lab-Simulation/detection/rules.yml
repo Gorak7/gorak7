@@ -1,0 +1,21 @@
+rules:
+  - id: SOC-001
+    name: Brute Force
+    severity: high
+    mitre: T1110
+  - id: SOC-002
+    name: Suspicious PowerShell
+    severity: high
+    mitre: T1059.001
+  - id: SOC-003
+    name: Encoded Command
+    severity: high
+    mitre: T1027
+  - id: SOC-004
+    name: Phishing Attachment
+    severity: high
+    mitre: T1566.001
+  - id: SOC-005
+    name: Unusual Outbound Transfer
+    severity: critical
+    mitre: T1041
