@@ -35,7 +35,9 @@ services:
       - ./logs:/logs:ro
     depends_on: [logstash]
   backend:
-    build: ./backend
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
     environment:
       ELASTICSEARCH_URL: http://elasticsearch:9200
       EVENTS_INDEX: soc-events
