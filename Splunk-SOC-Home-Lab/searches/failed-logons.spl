@@ -1,0 +1,7 @@
+index=* (EventCode=4625 OR EventID=4625)
+| eval src=coalesce(IpAddress, Source_Network_Address, src_ip, src)
+| eval account=coalesce(TargetUserName, user, Account_Name)
+| stats count min(_time) as first_seen max(_time) as last_seen values(host) as hosts by src account
+| where count >= 5
+| convert ctime(first_seen) ctime(last_seen)
+| sort - count
