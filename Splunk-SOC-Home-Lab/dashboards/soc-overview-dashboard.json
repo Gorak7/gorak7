@@ -1,0 +1,35 @@
+{
+  "title": "SOC Home Lab - Overview",
+  "description": "Dashboard build specification. Create the panels in Splunk Dashboard Studio or Classic Dashboard and adapt indexes/fields to your lab.",
+  "panels": [
+    {
+      "title": "Failed Logons Over Time",
+      "purpose": "Trend Windows Event ID 4625 over time",
+      "search": "index=wineventlog (EventCode=4625 OR EventID=4625) | timechart span=5m count",
+      "visualization": "line chart"
+    },
+    {
+      "title": "Top Failed Logon Sources",
+      "purpose": "Prioritize repeated failures by source and target account",
+      "search": "index=wineventlog (EventCode=4625 OR EventID=4625) | eval source_ip=coalesce(IpAddress,Source_Network_Address,src_ip,src) | eval target_user=coalesce(TargetUserName,user,Account_Name) | stats count by source_ip target_user | sort - count | head 10",
+      "visualization": "table"
+    },
+    {
+      "title": "Sysmon Process Events",
+      "purpose": "Recent process creation activity for triage",
+      "search": "index=endpoint sourcetype=*Sysmon* (EventCode=1 OR EventID=1) | table _time host User Image CommandLine ParentImage | sort - _time",
+      "visualization": "table"
+    },
+    {
+      "title": "Network Port Fan-out",
+      "purpose": "Highlight sources touching many destination ports when network data is configured",
+      "search": "index=network | eval source_ip=coalesce(src_ip,src,id_orig_h,SourceAddress) | eval destination_port=coalesce(dest_port,dst_port,id_resp_p,DestinationPort) | where isnotnull(source_ip) AND isnotnull(destination_port) | stats dc(destination_port) as unique_ports count as connections by source_ip | sort - unique_ports",
+      "visualization": "bar chart"
+    }
+  ],
+  "notes": [
+    "This JSON is a panel specification, not a guaranteed importable dashboard definition.",
+    "Update indexes, sourcetypes, and field names to match your Splunk environment.",
+    "Use a shared time picker and test each panel before publishing."
+  ]
+}
