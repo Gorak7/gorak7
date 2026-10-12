@@ -12,6 +12,14 @@
 <a href="https://www.leetcode.com/gorakaddepalli">LeetCode</a>
 </p>
 
+### SOC Home Lab with Splunk SIEM
+
+**Splunk | Sysmon | Windows | Linux | Kali Linux | Nmap | SPL**
+
+A guided SOC home lab for centralized endpoint log monitoring, failed-logon and process-event investigation, network-scan detection examples, dashboard planning, and incident documentation. Includes starter SPL searches and an incident report template.
+
+🔗 [View Project](./Splunk-SOC-Home-Lab/)
+
 ### ELK-Based SOC SIEM & Detection Lab
 
 **Elasticsearch | Logstash | Kibana | Filebeat | FastAPI | Python | MITRE ATT&CK | Detection Engineering**
