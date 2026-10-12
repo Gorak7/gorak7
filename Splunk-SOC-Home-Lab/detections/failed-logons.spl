@@ -1,0 +1,14 @@
+index=wineventlog (EventCode=4625 OR EventID=4625)
+| eval source_ip=coalesce(IpAddress, Source_Network_Address, src_ip, src)
+| eval target_user=coalesce(TargetUserName, user, Account_Name)
+| where isnotnull(target_user)
+| stats count min(_time) as first_seen max(_time) as last_seen values(host) as hosts values(LogonType) as logon_types by source_ip target_user
+| where count >= 5
+| convert ctime(first_seen) ctime(last_seen)
+| sort - count
+
+# Tuning:
+# - Replace wineventlog with your actual index.
+# - Verify field names in your events; Windows XML fields may be nested or named differently.
+# - Consider a 5–10 minute time window for alerting and exclude known benign service accounts carefully.
+# - This is an investigation starting point, not proof of brute force by itself.
