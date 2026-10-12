@@ -48,3 +48,24 @@ Built a time-series forecasting project demonstrating data preprocessing, trend 
 
 <h3 align="left">Languages and Tools:</h3>
 <p align="left"> <a href="https://www.python.org">Python</a> <a href="https://www.linux.org/">Linux</a> <a href="https://www.docker.com/">Docker</a> <a href="https://www.elastic.co/">Elastic Stack</a> </p>
+
+
+<h2>⚡ Energy & Sustainability Analytics Projects</h2>
+
+### Energy Consumption Forecasting and Anomaly Detection
+
+**Python | Pandas | NumPy | Matplotlib | SQL | SQLite | Time-Series Analysis**
+
+A reproducible utility analytics workflow using synthetic facility readings to demonstrate data-quality checks, robust rolling-baseline anomaly flags, a time-ordered seasonal-naive forecast baseline, evaluation metrics, charts, and SQL queries.
+
+🔗 [View Project](./Energy-Consumption-Forecasting-Anomaly-Detection/)
+
+### Carbon Emissions and Solar PV Performance Analysis
+
+**Python | Pandas | NumPy | Matplotlib | Excel | Power BI | Sustainability KPIs**
+
+A sustainability analytics workflow that calculates estimated grid emissions, solar contribution, Energy Use Intensity (EUI), solar yield, and monthly facility KPIs. Includes Power BI DAX guidance and an Excel reporting guide.
+
+🔗 [View Project](./Carbon-Emissions-Solar-PV-Performance-Analysis/)
+
+> **Note:** Both projects use synthetic demonstration data. Emissions factors are illustrative and must be replaced with a documented, applicable source before real-world reporting.
