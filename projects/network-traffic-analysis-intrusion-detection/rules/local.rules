@@ -1,0 +1,8 @@
+# Suricata local rules for controlled lab validation only.
+# These are simple demonstrations, not production-grade detection logic.
+# Rule 1: alert on a TCP SYN burst from one source to one destination.
+alert tcp any any -> any any (msg:"LAB Possible TCP SYN burst"; flags:S; flow:stateless; detection_filter:track by_src, count 20, seconds 10; classtype:attempted-recon; sid:9001001; rev:1;)
+
+# Rule 2: alert on a request to a reserved lab-only URI path over HTTP.
+# Generate only against a local/authorized HTTP server.
+alert http any any -> any any (msg:"LAB HTTP request to /lab-test-marker"; flow:established,to_server; http.uri; content:"/lab-test-marker"; startswith; classtype:bad-unknown; sid:9001002; rev:1;)
