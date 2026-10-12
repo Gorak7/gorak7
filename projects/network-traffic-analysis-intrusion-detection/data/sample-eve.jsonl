@@ -1,0 +1,3 @@
+{"timestamp":"2026-10-12T12:00:00.000000+0000","event_type":"alert","src_ip":"192.0.2.10","src_port":51514,"dest_ip":"198.51.100.20","dest_port":80,"proto":"TCP","alert":{"signature":"LAB HTTP request to /lab-test-marker","signature_id":9001002,"category":"Potentially Bad Traffic","severity":2}}
+{"timestamp":"2026-10-12T12:00:01.000000+0000","event_type":"flow","src_ip":"192.0.2.10","src_port":51514,"dest_ip":"198.51.100.20","dest_port":80,"proto":"TCP"}
+{"timestamp":"2026-10-12T12:00:02.000000+0000","event_type":"alert","src_ip":"192.0.2.11","src_port":51515,"dest_ip":"198.51.100.21","dest_port":443,"proto":"TCP","alert":{"signature":"LAB Example signature for parser test","signature_id":9001999,"category":"Test","severity":3}}
