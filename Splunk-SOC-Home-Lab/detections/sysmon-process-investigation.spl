@@ -1,0 +1,10 @@
+index=endpoint sourcetype=*Sysmon* (EventCode=1 OR EventID=1)
+| eval process=coalesce(Image, NewProcessName, process_name)
+| eval parent_process=coalesce(ParentImage, ParentProcessName, parent_process)
+| eval account=coalesce(User, user, SubjectUserName)
+| table _time host account process CommandLine parent_process ProcessId ParentProcessId
+| sort - _time
+
+# Investigative search, not a standalone maliciousness verdict.
+# Review parent-child relationship, image path, command line, account, signer/hash if collected,
+# and surrounding events. Update the index and field mappings to match your telemetry.
