@@ -1,0 +1,6 @@
+index=* (EventCode=1 OR EventID=1) sourcetype=*Sysmon*
+| eval process=coalesce(Image, NewProcessName, process_name)
+| eval parent=coalesce(ParentImage, ParentProcessName, parent_process)
+| eval user_name=coalesce(User, user, SubjectUserName)
+| table _time host user_name process CommandLine parent ProcessId ParentProcessId
+| sort - _time
