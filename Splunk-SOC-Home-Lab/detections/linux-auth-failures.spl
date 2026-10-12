@@ -1,0 +1,9 @@
+index=linux (sourcetype=linux_secure OR sourcetype=syslog) ("Failed password" OR "authentication failure" OR "Invalid user")
+| rex field=_raw "from (?<source_ip>\\d{1,3}(?:\\.\\d{1,3}){3})"
+| rex field=_raw "(?:for invalid user|for) (?<target_user>\\S+)"
+| stats count min(_time) as first_seen max(_time) as last_seen values(host) as hosts by source_ip target_user
+| where count >= 5
+| convert ctime(first_seen) ctime(last_seen)
+| sort - count
+
+# Linux log formats vary. Verify parsing on your distribution before using this as an alert.
