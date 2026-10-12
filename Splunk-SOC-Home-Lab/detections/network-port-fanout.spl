@@ -1,0 +1,10 @@
+index=network (sourcetype=*zeek* OR sourcetype=*suricata* OR sourcetype=*firewall* OR sourcetype=*netflow*)
+| eval source_ip=coalesce(src_ip, src, id_orig_h, SourceAddress)
+| eval destination_port=coalesce(dest_port, dst_port, id_resp_p, DestinationPort)
+| where isnotnull(source_ip) AND isnotnull(destination_port)
+| stats dc(destination_port) as unique_ports count as connections values(destination_port) as ports by source_ip
+| where unique_ports >= 15
+| sort - unique_ports
+
+# Requires network telemetry that includes source and destination port fields.
+# Tune threshold/time range to your environment; high fan-out can be legitimate.
