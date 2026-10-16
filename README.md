@@ -77,3 +77,11 @@ A sustainability analytics workflow that calculates estimated grid emissions, so
 🔗 [View Project](./Carbon-Emissions-Solar-PV-Performance-Analysis/)
 
 > **Note:** Both projects use synthetic demonstration data. Emissions factors are illustrative and must be replaced with a documented, applicable source before real-world reporting.
+
+### REST API Testing and Database Validation
+
+**Postman | REST APIs | SQL | JSON | GitHub**
+
+A beginner-friendly QA project covering CRUD API requests, response/status-code assertions, JSON validation, negative testing, and SQL validation using a local SQLite dataset.
+
+🔗 [View Project](./REST-API-Testing-and-Database-Validation/)
