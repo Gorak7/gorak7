@@ -1,0 +1,252 @@
+{
+  "info": {
+    "_postman_id": "a7f93a6a-2f5a-4fd7-ae8a-2f4c9a3d1107",
+    "name": "REST API Testing and Database Validation",
+    "description": "Entry-level QA practice collection for JSONPlaceholder. CRUD write operations are simulated by the demo API and are not persisted.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://jsonplaceholder.typicode.com"
+    }
+  ],
+  "item": [
+    {
+      "name": "GET - Single post",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/posts/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "posts",
+            "1"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response is JSON', function () { pm.response.to.be.json; });",
+              "const body = pm.response.json();",
+              "pm.test('Post contains required fields', function () { pm.expect(body).to.have.property('userId'); pm.expect(body).to.have.property('id', 1); pm.expect(body).to.have.property('title').that.is.a('string').and.not.empty; pm.expect(body).to.have.property('body').that.is.a('string'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET - Filter posts by userId",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/posts?userId=1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "posts"
+          ],
+          "query": [
+            {
+              "key": "userId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response is an array', function () { pm.expect(pm.response.json()).to.be.an('array'); });",
+              "pm.test('Every returned post belongs to user 1', function () { pm.response.json().forEach(function (post) { pm.expect(post.userId).to.eql(1); }); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST - Create post (simulated)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"QA API test post\",\n  \"body\": \"Created during Postman portfolio testing.\",\n  \"userId\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/posts",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "posts"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 201 Created', function () { pm.response.to.have.status(201); });",
+              "pm.test('Response contains submitted values', function () { const body = pm.response.json(); pm.expect(body.title).to.eql('QA API test post'); pm.expect(body.body).to.eql('Created during Postman portfolio testing.'); pm.expect(body.userId).to.eql(1); pm.expect(body.id).to.exist; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "PUT - Update post (simulated)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": 1,\n  \"title\": \"Updated by QA test\",\n  \"body\": \"Updated test payload.\",\n  \"userId\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/posts/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "posts",
+            "1"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200 OK', function () { pm.response.to.have.status(200); });",
+              "pm.test('Updated fields are returned', function () { const body = pm.response.json(); pm.expect(body.id).to.eql(1); pm.expect(body.title).to.eql('Updated by QA test'); pm.expect(body.body).to.eql('Updated test payload.'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "DELETE - Delete post (simulated)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/posts/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "posts",
+            "1"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200 OK', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response body is empty or a JSON object', function () { const text = pm.response.text(); pm.expect(text === '' || (function(){ try { return typeof JSON.parse(text) === 'object'; } catch (e) { return false; } })()).to.eql(true); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "NEGATIVE - Unknown route returns 404",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/invalid-resource-path/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "invalid-resource-path",
+            "1"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Unknown route returns 404', function () { pm.response.to.have.status(404); });"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
