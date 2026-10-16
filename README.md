@@ -85,3 +85,22 @@ A sustainability analytics workflow that calculates estimated grid emissions, so
 A beginner-friendly QA project covering CRUD API requests, response/status-code assertions, JSON validation, negative testing, and SQL validation using a local SQLite dataset.
 
 🔗 [View Project](./REST-API-Testing-and-Database-Validation/)
+
+
+### Secure Cyber Incident Manager
+
+**Node.js | Express | PostgreSQL | REST API | HTML/CSS/JavaScript | Docker | Supertest**
+
+Full-stack incident management dashboard with incident creation, filtering, status updates, request validation, parameterized SQL, API documentation, and automated API tests.
+
+🔗 [View Project](./Secure-Cyber-Incident-Manager/)
+
+### Threat Intelligence & IOC Analysis Platform
+
+**Node.js | Express | PostgreSQL | REST API | HTML/CSS/JavaScript | Docker | Supertest**
+
+Full-stack IOC triage console for synthetic IP/domain/URL/hash indicators, duplicate detection, search and filtering, confidence scoring, status updates, and API tests.
+
+🔗 [View Project](./Threat-Intelligence-IOC-Platform/)
+
+> Both applications include synthetic sample data and local-development configuration. Run the documented tests and capture your own runtime screenshots before describing the applications as fully verified. Production deployment requires reviewing authentication, secrets, and authorization settings.
