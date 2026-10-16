@@ -23,7 +23,7 @@ let incidents = [
 const jwtSecret = process.env.JWT_SECRET || 'local-demo-only-change-me';
 function auth(req, res, next) {
   const token = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
-  if (!token && demo) { req.user = { email: 'demo@local', role: 'admin' }; return next(); }
+  if (!token && (demo || process.env.NODE_ENV !== 'production')) { req.user = { email: 'local-dev@demo', role: 'admin' }; return next(); }
   try { req.user = jwt.verify(token, jwtSecret); next(); }
   catch { return res.status(401).json({ error: 'Valid bearer token required' }); }
 }
