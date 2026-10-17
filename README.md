@@ -104,3 +104,14 @@ Full-stack IOC triage console for synthetic IP/domain/URL/hash indicators, dupli
 🔗 [View Project](./Threat-Intelligence-IOC-Platform/)
 
 > Both applications include synthetic sample data and local-development configuration. Run the documented tests and capture your own runtime screenshots before describing the applications as fully verified. Production deployment requires reviewing authentication, secrets, and authorization settings.
+
+
+### QA Automation Portfolio
+
+**Selenium | Java | TestNG | REST Assured | Postman | MySQL | Spring Boot | CI/CD**
+
+- [E-Commerce Web Application — Selenium Automation Framework](./QA-Portfolio/Ecommerce-Automation/README.md)
+- [Online Bookstore — REST API Testing](./QA-Portfolio/Online-Bookstore-API/README.md)
+- [QA Portfolio Overview](./QA-Portfolio/README.md)
+
+Full-stack demo applications with frontend, REST backend, MySQL schema, automated test suites, CI configuration, and evidence checklists. Test results and screenshots should be generated from actual local/CI runs.
