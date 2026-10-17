@@ -1,51 +1,56 @@
 # Online Bookstore — Full-Stack API Testing Project
 
-A full-stack bookstore demo with a browser UI, Spring Boot REST API, MySQL database, Postman collection, REST Assured automation, SQL validation, and GitHub Actions CI.
+A full-stack bookstore demo with browser UI, Spring Boot REST API, MySQL, Postman/Newman, REST Assured/JUnit 5, SQL validation, and GitHub Actions.
 
-> **Evidence integrity:** test scripts and evidence instructions are provided. Run the application and tests yourself before claiming passing counts or uploading screenshots/reports as real results.
+> **Evidence integrity:** test scripts and evidence automation are provided. Do not report tests as passed or screenshots as generated until a real run produces them.
 
-## Stack
-- Frontend: HTML, CSS, vanilla JavaScript
-- Backend: Java 17, Spring Boot 3, Spring Data JPA, Bean Validation
-- Database: MySQL 8
-- API documentation/testing: OpenAPI/Swagger UI, Postman, Newman
-- Automated tests: REST Assured, JUnit 5
-- CI: GitHub Actions
+## Quick start — easiest option (Docker Desktop)
+1. Install and start Docker Desktop.
+2. Open a terminal in `QA-Portfolio/Online-Bookstore-API`.
+3. Run:
+   ```bash
+   docker compose up --build -d
+   docker compose ps
+   docker compose logs -f app
+   ```
+4. Wait for Spring Boot to finish starting. Open **http://localhost:8081**.
+5. Health check: **http://localhost:8081/api/health**. Expected JSON contains `"status":"UP"`.
+6. Swagger UI: **http://localhost:8081/swagger-ui/index.html**.
+7. Stop with `docker compose down`. To delete the local demo database and start fresh, use `docker compose down -v`.
 
-## Features
-- Browse and search books
-- View individual book records
-- Create, update, and delete books (CRUD)
-- Place a demo order and verify stock availability
-- Validate request payloads and error responses
-- Query the MySQL database to compare stored records with API responses
+Compose waits for MySQL health before starting Spring Boot. Inside Docker, the app connects to `db:3306`; the host mapping `localhost:3308` is for database tools on your computer only.
 
-## Start locally
-1. Install Docker Desktop, JDK 17+, and Maven 3.9+.
-2. Run `docker compose up -d db` from this directory.
-3. Run `mvn spring-boot:run` from `backend/`.
-4. Open http://localhost:8081 for the UI.
-5. API base: http://localhost:8081/api; OpenAPI UI: http://localhost:8081/swagger-ui/index.html.
-6. Import `postman/Online-Bookstore.postman_collection.json` into Postman.
-7. Run `mvn test` in `automation/` for REST Assured checks.
-8. Optional Postman CLI: `npm install -g newman`, then `newman run postman/Online-Bookstore.postman_collection.json`.
+## Run backend directly on your computer
+Requirements: Docker Desktop, JDK 17+, Maven 3.9+.
+1. Run `docker compose up -d db` from this project folder.
+2. Wait until `docker compose ps` shows the database is healthy.
+3. In another terminal, run `cd backend`, then `mvn -B clean spring-boot:run`.
+4. Open http://localhost:8081.
+5. API base: http://localhost:8081/api; Swagger: http://localhost:8081/swagger-ui/index.html.
+
+## Tests
+- REST Assured + JUnit 5: from `automation/`, run `mvn -B test` while the backend and database are running.
+- Postman: import `postman/Online-Bookstore.postman_collection.json`; set the base URL to `http://localhost:8081`.
+- Newman: from the project root, run `npx --yes newman run postman/Online-Bookstore.postman_collection.json`.
+- CI: the GitHub Actions workflow runs backend build, REST Assured/UI checks, Newman, and uploads any generated reports/screenshots as artifacts.
 
 ## API endpoints
 | Method | Endpoint | Purpose |
 |---|---|---|
-| GET | /api/health | Health check |
-| GET | /api/books | List/search books with optional `q` |
-| GET | /api/books/{id} | Fetch one book |
-| POST | /api/books | Create a book |
-| PUT | /api/books/{id} | Update a book |
-| DELETE | /api/books/{id} | Delete a book |
-| POST | /api/orders | Create a demo order |
+| GET | `/api/health` | Health check |
+| GET | `/api/books?q=Clean` | List/search books |
+| GET | `/api/books/{id}` | Fetch one book |
+| POST | `/api/books` | Create a book |
+| PUT | `/api/books/{id}` | Update a book |
+| DELETE | `/api/books/{id}` | Delete a book |
+| POST | `/api/orders` | Create a simulated demo order |
 
-## Test scenarios
-- Positive: list books, search, fetch a book, create/update/delete, valid order.
-- Negative: unknown book ID, invalid price, blank title, malformed email, non-positive quantity, insufficient stock.
-- Database: compare IDs, title, price, and stock returned by API against SQL queries.
-- Contract: status codes, JSON fields, content type, and error response shape.
+## Troubleshooting
+- **Connection refused:** inspect `docker compose ps` and `docker compose logs --tail=200 app`; do not open the UI until the app has started.
+- **Database error:** inspect `docker compose logs --tail=200 db`. Default host DB port is 3308; if that port is occupied, change the host-side mapping. Keep the app's internal JDBC hostname `db` and port 3306 unchanged.
+- **404/blank UI:** confirm `backend/src/main/resources/static/index.html` exists and rebuild with `docker compose up --build -d`; hard-refresh the browser.
+- **Maven/Java error:** run `java -version` and `mvn -version`; use Java 17+. Run app commands in `backend/` and tests in `automation/`.
+- **Old database data:** named volumes preserve records across restarts. To recreate the database from the checked-in schema, run `docker compose down -v` and then `docker compose up --build -d`. This deletes local demo data.
 
 ## Evidence
-Capture real screenshots/results into `evidence/`: UI catalog, book search, Postman response, Swagger page, SQL output, REST Assured report, Newman summary, and GitHub Actions run. See `evidence/README.md`. Do not claim a test count or pass rate until actually measured.
+Real screenshots, SQL output, REST Assured reports, Newman results, and CI logs should be downloaded from an actual successful workflow run or generated locally. Do not claim test counts or pass rates until measured.
