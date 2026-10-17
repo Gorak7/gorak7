@@ -122,3 +122,12 @@ Full-stack demo applications with frontend, REST backend, MySQL schema, automate
 A full-stack QA project with a user-directory front end, REST CRUD API, database validation queries, Postman assertions, manual test cases, defect-report template, and MIT licence. Test evidence is to be captured from actual local runs.
 
 🔗 [View Full-Stack QA Project](./REST-API-Testing-Database-Validation/)
+
+
+### E-Commerce Website Testing & Automation
+
+**Java | Spring Boot | Selenium WebDriver | TestNG | Maven | REST API | H2 | HTML/CSS/JavaScript**
+
+Full-stack QA demo featuring product search, shopping cart, checkout, REST endpoints, H2 order persistence, Selenium UI regression tests, API tests, failure screenshot capture, a detailed test plan, and GitHub Actions workflow.
+
+🔗 [View Project](./E-Commerce-Website-Testing-Automation/)
