@@ -50,6 +50,3 @@ Capture your own images and save them in `evidence/`:
 - `07-jenkins-build.png` — actual Jenkins run, if configured
 
 Do not claim a specific test count, defect count, pass rate, or time saving until measured. See `evidence/README.md`.
-
-## Resume-ready description (update after running)
-**E-Commerce Web Application: Selenium Automation Framework** — Built a browser-based shopping application backed by Spring Boot and MySQL; developed reusable Selenium Page Object Model tests with TestNG and Maven for product search, cart, checkout, and validation flows; configured CI execution and retained actual test reports/screenshots as evidence.
