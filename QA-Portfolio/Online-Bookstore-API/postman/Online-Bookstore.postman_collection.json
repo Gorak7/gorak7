@@ -1,0 +1,253 @@
+{
+  "info": {
+    "name": "Online Bookstore API Regression",
+    "description": "CRUD, validation, search and demo-order checks. Set baseUrl to http://localhost:8081.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "bookId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/health"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('health returns 200',()=>pm.response.to.have.status(200));",
+              "pm.test('service is UP',()=>pm.expect(pm.response.json().status).to.eql('UP'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List books",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/books"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('list returns 200',()=>pm.response.to.have.status(200));",
+              "pm.test('response is an array',()=>pm.expect(pm.response.json()).to.be.an('array'));",
+              "if(pm.response.json().length){pm.collectionVariables.set('bookId',pm.response.json()[0].id);}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search books",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/books?q=Clean"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('search returns 200',()=>pm.response.to.have.status(200));",
+              "pm.test('search response is an array',()=>pm.expect(pm.response.json()).to.be.an('array'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get book by ID",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/books/{{bookId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('get by ID returns 200',()=>pm.response.to.have.status(200));",
+              "pm.test('book has title and price',()=>{const b=pm.response.json();pm.expect(b.title).to.be.a('string');pm.expect(Number(b.price)).to.be.greaterThan(0);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create book",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"API Testing in Practice\",\n  \"author\": \"QA Portfolio\",\n  \"price\": 399,\n  \"stock\": 4\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{baseUrl}}/api/books"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('create returns 201',()=>pm.response.to.have.status(201));",
+              "pm.test('created record contains ID',()=>pm.expect(pm.response.json().id).to.exist);",
+              "pm.collectionVariables.set('createdBookId',pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reject invalid book",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"\",\n  \"author\": \"\",\n  \"price\": -5,\n  \"stock\": -1\n}"
+        },
+        "url": "{{baseUrl}}/api/books"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('invalid payload is rejected',()=>pm.expect(pm.response.code).to.be.oneOf([400,422]));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update created book",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"API Testing in Practice - Updated\",\n  \"author\": \"QA Portfolio\",\n  \"price\": 429,\n  \"stock\": 4\n}"
+        },
+        "url": "{{baseUrl}}/api/books/{{createdBookId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('update returns 200',()=>pm.response.to.have.status(200));",
+              "pm.test('title was updated',()=>pm.expect(pm.response.json().title).to.include('Updated'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create demo order",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"bookId\": {{bookId}}, \"quantity\": 1}"
+        },
+        "url": "{{baseUrl}}/api/orders"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('valid demo order returns 201',()=>pm.response.to.have.status(201));",
+              "pm.test('order is simulated',()=>pm.expect(pm.response.json().status).to.eql('SIMULATED'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete created book",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/api/books/{{createdBookId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('delete returns 204',()=>pm.response.to.have.status(204));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Unknown book returns 404",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/books/99999999"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('unknown ID returns 404',()=>pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
