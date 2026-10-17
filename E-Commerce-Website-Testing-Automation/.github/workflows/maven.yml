@@ -1,4 +1,4 @@
-name: Maven build
+name: E-commerce QA build and tests
 on:
   push:
     paths:
@@ -7,7 +7,7 @@ on:
     paths:
       - 'E-Commerce-Website-Testing-Automation/**'
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -19,4 +19,19 @@ jobs:
           distribution: temurin
           java-version: '17'
           cache: maven
-      - run: mvn -B -DskipTests package
+      - name: Package application
+        run: mvn -B -DskipTests package
+      - name: Start application and run API + browser tests
+        shell: bash
+        run: |
+          java -jar target/ecommerce-qa-automation-1.0.0.jar > app.log 2>&1 &
+          APP_PID=$!
+          trap 'kill "$APP_PID" 2>/dev/null || true' EXIT
+          for attempt in {1..40}; do
+            if curl --fail --silent http://localhost:8080/api/health; then
+              break
+            fi
+            sleep 3
+          done
+          curl --fail http://localhost:8080/api/health
+          mvn -B test -Dheadless=true
