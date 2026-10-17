@@ -1,1 +1,9 @@
-<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd"><suite name="Ecommerce Regression"><test name="UI smoke tests"><classes><class name="com.gorak.qa.tests.StoreSmokeTest"/></classes></test></suite>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Ecommerce Regression">
+  <test name="UI smoke and evidence capture">
+    <classes>
+      <class name="com.gorak.qa.tests.StoreSmokeTest"/>
+      <class name="com.gorak.qa.tests.EvidenceCaptureTest"/>
+    </classes>
+  </test>
+</suite>
