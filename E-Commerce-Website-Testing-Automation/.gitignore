@@ -1,0 +1,8 @@
+target/
+data/
+*.log
+.idea/
+.vscode/
+.DS_Store
+evidence/screenshots/*.png
+!evidence/screenshots/.gitkeep
