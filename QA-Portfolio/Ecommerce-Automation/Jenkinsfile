@@ -1,0 +1,13 @@
+pipeline {
+  agent any
+  tools { jdk 'JDK17'; maven 'Maven3' }
+  environment { BASE_URL = 'http://localhost:8080'; HEADLESS = 'true' }
+  stages {
+    stage('Checkout') { steps { checkout scm } }
+    stage('Build backend') { steps { dir('QA-Portfolio/Ecommerce-Automation/backend') { sh 'mvn -B clean package -DskipTests' } } }
+    stage('UI regression') { steps { dir('QA-Portfolio/Ecommerce-Automation/automation') { sh 'mvn -B test' } } }
+  }
+  post {
+    always { junit allowEmptyResults: true, testResults: 'QA-Portfolio/Ecommerce-Automation/automation/target/surefire-reports/*.xml' }
+  }
+}
