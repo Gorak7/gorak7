@@ -49,6 +49,3 @@ A full-stack bookstore demo with a browser UI, Spring Boot REST API, MySQL datab
 
 ## Evidence
 Capture real screenshots/results into `evidence/`: UI catalog, book search, Postman response, Swagger page, SQL output, REST Assured report, Newman summary, and GitHub Actions run. See `evidence/README.md`. Do not claim a test count or pass rate until actually measured.
-
-## Resume-ready description (update after running)
-**REST API Testing: Online Bookstore Service** — Built a full-stack bookstore demo using Spring Boot and MySQL; created Postman requests and REST Assured tests for CRUD, validation, and order endpoints; verified persistence with SQL and configured CI execution for repeatable API regression checks.
