@@ -1,0 +1,21 @@
+services:
+  db:
+    image: mysql:8.4
+    container_name: qa-ecommerce-mysql
+    environment:
+      MYSQL_DATABASE: ecommerce
+      MYSQL_USER: qa_user
+      MYSQL_PASSWORD: qa_password
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - ecommerce_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+volumes:
+  ecommerce_data:
