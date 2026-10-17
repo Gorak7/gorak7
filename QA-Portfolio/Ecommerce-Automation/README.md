@@ -1,52 +1,53 @@
 # E-Commerce Web Application — Selenium Automation Framework
 
-A full-stack QA portfolio project: a browser-based shopping UI, Java Spring Boot REST API, MySQL persistence, and a Selenium/TestNG automation framework.
+A full-stack QA portfolio project: browser storefront, Java Spring Boot REST API, MySQL persistence, and Selenium/TestNG automation.
 
-> **Evidence integrity:** this repository contains runnable test assets and an evidence checklist. Add screenshots and report files from your own local executions; no execution counts, defects, or screenshots are represented as real until you generate them.
+> **Evidence integrity:** tests and evidence automation are provided, but test results/screenshots are only genuine after the workflow or local tests have actually run. No passing result is claimed here.
 
-## Architecture
-- **Frontend:** HTML, CSS, vanilla JavaScript (served by Spring Boot static resources)
-- **Backend:** Java 17+, Spring Boot 3, Spring Web, Spring Data JPA
-- **Database:** MySQL 8
-- **UI automation:** Selenium 4, Java, TestNG, Maven
-- **Reporting/CI:** Surefire HTML/XML output; Jenkins pipeline example
-- **Coverage:** health, product listing/search, cart, order creation, API error handling, browser workflows
+## Stack
+- Frontend: HTML, CSS, vanilla JavaScript (served by Spring Boot)
+- Backend: Java 17, Spring Boot 3, Spring Data JPA
+- Database: MySQL 8.4
+- UI automation: Selenium 4, TestNG, Maven
+- CI: GitHub Actions, Surefire reports, screenshot artifacts
 
-## Repository layout
-```
-Ecommerce-Automation/
-├── frontend/                 # UI source (copy into backend src/main/resources/static)
-├── backend/                  # Spring Boot application
-├── automation/               # Selenium + TestNG suite
-├── database/schema.sql
-├── evidence/                 # Store real screenshots/reports here
-├── Jenkinsfile
-└── docker-compose.yml
-```
+## Quick start — easiest option (Docker Desktop)
+1. Install and start Docker Desktop.
+2. Open a terminal in this project folder: `QA-Portfolio/Ecommerce-Automation`.
+3. Run:
+   ```bash
+   docker compose up --build -d
+   docker compose ps
+   docker compose logs -f app
+   ```
+4. Wait until Spring Boot logs show that it has started, then open **http://localhost:8080**.
+5. Check **http://localhost:8080/api/health**. Expected JSON contains `"status":"UP"`.
+6. Stop the project with `docker compose down`. Data remains in the named Docker volume. To reset demo data, use `docker compose down -v` (this permanently deletes this project's database volume).
 
-## Run the app
-Prerequisites: JDK 17+, Maven 3.9+, Docker Desktop. From this folder:
-1. Start MySQL: `docker compose up -d db`
-2. In `backend`, configure `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, and `SPRING_DATASOURCE_PASSWORD` or use the local defaults in `application.properties`.
-3. Run `mvn spring-boot:run`.
-4. Open http://localhost:8080. API health: http://localhost:8080/api/health; products: http://localhost:8080/api/products.
-5. Start the Selenium suite from `automation`: `mvn test`. Set `BASE_URL` to change the application URL.
+Compose starts MySQL first and waits for its health check before starting the application. App-to-database traffic uses the Compose service name `db:3306`; do not use `localhost:3307` from inside the app container.
 
-## Test strategy
-- UI: home page, product rendering/search, add-to-cart, quantity and total, checkout validation, order confirmation.
-- API: product listing, search, invalid requests, order payload validation.
-- Cross-browser: configure Selenium browser locally for Chrome, Firefox, and Edge; install matching browsers/drivers.
-- Regression: Maven Surefire output can be archived by Jenkins.
-- Defect reporting: record reproducible steps, expected/actual result, environment, severity, priority, and evidence link.
+## Run without Dockerizing the application
+Requirements: JDK 17+, Maven 3.9+, Docker Desktop.
+1. From this project folder, run `docker compose up -d db`.
+2. Wait for MySQL: `docker compose ps` should show the DB as healthy.
+3. In a second terminal, `cd backend`, then run `mvn -B clean spring-boot:run`.
+4. Open http://localhost:8080.
+5. Run UI automation in a separate terminal: `cd automation`, then `mvn -B test`. Make sure Chrome is installed. The suite defaults to `http://localhost:8080`; override `BASE_URL` if needed.
 
-## Evidence checklist
-Capture your own images and save them in `evidence/`:
-- `01-homepage.png` — app running in browser
-- `02-product-search.png` — search results
-- `03-cart.png` — cart with item and total
-- `04-checkout-validation.png` — validation message
-- `05-test-report.png` — actual TestNG/Surefire report
-- `06-failed-test-screenshot.png` — only if a test genuinely fails
-- `07-jenkins-build.png` — actual Jenkins run, if configured
+## Endpoints
+- UI: http://localhost:8080
+- Health: http://localhost:8080/api/health
+- Product list/search: http://localhost:8080/api/products and `/api/products?q=Mouse`
+- Demo order: `POST /api/orders` (simulated; no payment is processed)
 
-Do not claim a specific test count, defect count, pass rate, or time saving until measured. See `evidence/README.md`.
+## Troubleshooting
+- **Connection refused:** start with `docker compose ps` and `docker compose logs --tail=200 app`. If running the backend on the host, confirm it finished starting and use port 8080.
+- **Database access/startup error:** run `docker compose logs --tail=200 db`; wait for DB health. Default host port is 3307. If port 3307 is already occupied, change the host-side mapping in Compose and the host-run JDBC URL together; inside Compose, keep port 3306 and hostname `db`.
+- **404/blank UI:** confirm `backend/src/main/resources/static/index.html` exists; rebuild with `docker compose up --build -d`; then hard-refresh the browser.
+- **Maven/Java error:** run `java -version` and `mvn -version`; both should report Java 17 or newer. Run Maven commands from `backend/` for the application and `automation/` for UI tests.
+- **Stale/incorrect database state:** demo database persists in a named volume. To recreate it from the checked-in schema, stop the project and run `docker compose down -v`, then `docker compose up --build -d`. This deletes local demo data.
+
+## Test strategy and evidence
+The Selenium/TestNG suite covers page loading, product rendering/search, cart interaction, and checkout validation. Tests create screenshots under `automation/evidence/screenshots/`; Maven reports are under `automation/target/surefire-reports/`. GitHub Actions is configured to upload available reports/screenshots as workflow artifacts. Download artifacts only after an actual workflow run completes.
+
+Do not claim test counts, pass rates, defects, or screenshots as real until generated by a successful run. See `evidence/README.md`.
