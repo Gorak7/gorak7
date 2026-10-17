@@ -33,6 +33,22 @@ jobs:
       - name: Build application
         working-directory: QA-Portfolio/Online-Bookstore-API/backend
         run: mvn -B package -DskipTests
-      - name: Compile API automation
+      - name: Start application
+        working-directory: QA-Portfolio/Online-Bookstore-API/backend
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3308/bookstore
+          SPRING_DATASOURCE_USERNAME: book_user
+          SPRING_DATASOURCE_PASSWORD: book_password
+        run: |
+          nohup java -jar target/bookstore-app-1.0.0.jar > /tmp/bookstore.log 2>&1 &
+          for i in {1..40}; do
+            if curl --fail http://127.0.0.1:8081/api/health; then exit 0; fi
+            sleep 3
+          done
+          cat /tmp/bookstore.log
+          exit 1
+      - name: Run REST Assured tests
         working-directory: QA-Portfolio/Online-Bookstore-API/automation
-        run: mvn -B test-compile
+        env:
+          BASE_URL: http://127.0.0.1:8081
+        run: mvn -B test
