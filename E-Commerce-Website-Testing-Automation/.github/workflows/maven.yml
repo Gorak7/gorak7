@@ -1,0 +1,22 @@
+name: Maven build
+on:
+  push:
+    paths:
+      - 'E-Commerce-Website-Testing-Automation/**'
+  pull_request:
+    paths:
+      - 'E-Commerce-Website-Testing-Automation/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: E-Commerce-Website-Testing-Automation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - run: mvn -B -DskipTests package
