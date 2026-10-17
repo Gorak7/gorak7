@@ -93,11 +93,4 @@ Do not mark tests as passed unless you ran them. Do not include API keys, passwo
 
 Manual API testing, CRUD workflows, positive/negative testing, status-code validation, JSON assertions, SQL data checks, defect documentation, and test evidence management.
 
-## Resume-ready description
 
-**REST API Testing and Database Validation | Postman, SQL, JSON**
-- Designed and organized Postman tests for GET, POST, PUT, and DELETE API workflows, validating response codes and JSON fields.
-- Covered positive and negative scenarios and documented expected outcomes and reproducible defect details.
-- Wrote SQLite queries to verify records, detect duplicate identifiers and null fields, and check data consistency in a local sample dataset.
-
-Use these bullets once you have run the collection and SQL scripts and can explain the results in an interview.
