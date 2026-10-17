@@ -54,7 +54,14 @@ jobs:
           BASE_URL: http://127.0.0.1:8080
           HEADLESS: 'true'
         run: mvn -B test
-      - name: Upload reports and screenshots
+      - name: Capture SQL database validation output
+        if: always()
+        env:
+          MYSQL_PWD: qa_password
+        run: |
+          mkdir -p QA-Portfolio/Ecommerce-Automation/evidence/generated
+          mysql -h 127.0.0.1 -P 3307 -u qa_user ecommerce < QA-Portfolio/Ecommerce-Automation/database/validation.sql | tee QA-Portfolio/Ecommerce-Automation/evidence/generated/sql-validation.txt
+      - name: Upload reports, screenshots and SQL output
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -62,6 +69,7 @@ jobs:
           path: |
             QA-Portfolio/Ecommerce-Automation/automation/target/surefire-reports/
             QA-Portfolio/Ecommerce-Automation/automation/evidence/screenshots/
+            QA-Portfolio/Ecommerce-Automation/evidence/generated/sql-validation.txt
             /tmp/ecommerce.log
           if-no-files-found: warn
           retention-days: 30
