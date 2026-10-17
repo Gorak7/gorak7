@@ -86,7 +86,6 @@ A beginner-friendly QA project covering CRUD API requests, response/status-code 
 
 🔗 [View Project](./REST-API-Testing-and-Database-Validation/)
 
-
 ### Secure Cyber Incident Manager
 
 **Node.js | Express | PostgreSQL | REST API | HTML/CSS/JavaScript | Docker | Supertest**
@@ -115,3 +114,11 @@ Full-stack IOC triage console for synthetic IP/domain/URL/hash indicators, dupli
 - [QA Portfolio Overview](./QA-Portfolio/README.md)
 
 Full-stack demo applications with frontend, REST backend, MySQL schema, automated test suites, CI configuration, and evidence checklists. Test results and screenshots should be generated from actual local/CI runs.
+
+### Full-Stack REST API Testing and Database Validation
+
+**HTML | CSS | JavaScript | Java | Spring Boot | PostgreSQL | Postman | SQL | Docker**
+
+A full-stack QA project with a user-directory front end, REST CRUD API, database validation queries, Postman assertions, manual test cases, defect-report template, and MIT licence. Test evidence is to be captured from actual local runs.
+
+🔗 [View Full-Stack QA Project](./REST-API-Testing-Database-Validation/)
