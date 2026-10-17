@@ -26,12 +26,12 @@ Prerequisite: Docker Desktop with Docker Compose.
 6. Stop with: docker compose down. To erase local database data too, use docker compose down -v.
 
 ## Run Postman tests
-Import postman/REST-API-Testing.postman_collection.json. Run requests in order against http://localhost:8080. The create request saves a user ID for later tests. Export the real run report and store it under evidence/reports/. Capture actual screenshots under evidence/screenshots/.
+Import postman/REST-API-Testing.postman_collection.json. Run requests in order against http://localhost:8080. The create request saves a user ID for later tests. Export the Postman run report and store it under evidence/reports/. Capture screenshots under evidence/screenshots/.
 
 ## Repository contents
-- test-cases/test-cases.csv — manual test register; all tests start as Not Run.
+- test-cases/test-cases.csv — manual test register.
 - sql/validation-queries.sql — database validation.
-- bug-reports/BUG-REPORT-TEMPLATE.md — defect documentation template.
+- bug-reports/BUG-REPORT-TEMPLATE.md — defect documentation.
 - evidence/README.md — screenshot and report checklist.
 - LICENSE — MIT licence.
 
@@ -46,6 +46,3 @@ Every /api/users endpoint requires X-API-Key: qa-demo-key.
 
 ## Security note
 This is a local learning project. The hard-coded demo API key is not production authentication. Do not expose this service publicly or use real personal data. Production systems should use externalized secrets, proper identity management, HTTPS, rate limiting, and audit logging.
-
-## Evidence integrity
-No test is represented as passed until it has actually been run. Screenshots and reports must be captured from a real local run, not fabricated mockups.
