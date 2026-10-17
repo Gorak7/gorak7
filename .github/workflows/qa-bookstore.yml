@@ -1,0 +1,81 @@
+name: QA Portfolio - Bookstore API and UI regression
+on:
+  push:
+    paths:
+      - 'QA-Portfolio/Online-Bookstore-API/**'
+      - '.github/workflows/qa-bookstore.yml'
+  pull_request:
+    paths:
+      - 'QA-Portfolio/Online-Bookstore-API/**'
+      - '.github/workflows/qa-bookstore.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  bookstore:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_DATABASE: bookstore
+          MYSQL_USER: book_user
+          MYSQL_PASSWORD: book_password
+        ports:
+          - 3308:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot_password"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: browser-actions/setup-chrome@v1
+      - name: Build backend
+        working-directory: QA-Portfolio/Online-Bookstore-API/backend
+        run: mvn -B clean package -DskipTests
+      - name: Start app and wait for health
+        working-directory: QA-Portfolio/Online-Bookstore-API/backend
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3308/bookstore?connectTimeout=10000
+          SPRING_DATASOURCE_USERNAME: book_user
+          SPRING_DATASOURCE_PASSWORD: book_password
+        run: |
+          nohup java -jar target/bookstore-app-1.0.0.jar > /tmp/bookstore.log 2>&1 &
+          for i in {1..60}; do
+            if curl --silent --fail http://127.0.0.1:8081/api/health; then
+              echo "Application is healthy"
+              exit 0
+            fi
+            sleep 2
+          done
+          cat /tmp/bookstore.log
+          exit 1
+      - name: Run REST Assured and Selenium UI tests
+        working-directory: QA-Portfolio/Online-Bookstore-API/automation
+        env:
+          BASE_URL: http://127.0.0.1:8081
+          UI_BASE_URL: http://127.0.0.1:8081
+        run: mvn -B test
+      - name: Run Postman collection with Newman
+        working-directory: QA-Portfolio/Online-Bookstore-API
+        run: npx --yes newman run postman/Online-Bookstore.postman_collection.json --reporters cli,junit --reporter-junit-export automation/target/newman-results.xml
+      - name: Upload reports, screenshots, and application log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bookstore-test-evidence
+          path: |
+            QA-Portfolio/Online-Bookstore-API/automation/target/surefire-reports/
+            QA-Portfolio/Online-Bookstore-API/automation/target/newman-results.xml
+            QA-Portfolio/Online-Bookstore-API/automation/evidence/screenshots/
+            /tmp/bookstore.log
+          if-no-files-found: warn
+          retention-days: 30
