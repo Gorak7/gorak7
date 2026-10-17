@@ -1,4 +1,4 @@
-name: Bookstore API regression
+name: Bookstore API, UI and Postman regression
 on:
   push:
     paths:
@@ -30,6 +30,10 @@ jobs:
           distribution: temurin
           java-version: '17'
           cache: maven
+      - uses: browser-actions/setup-chrome@v1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       - name: Build application
         working-directory: QA-Portfolio/Online-Bookstore-API/backend
         run: mvn -B package -DskipTests
@@ -47,8 +51,25 @@ jobs:
           done
           cat /tmp/bookstore.log
           exit 1
-      - name: Run REST Assured tests
+      - name: Run REST Assured and UI screenshot tests
         working-directory: QA-Portfolio/Online-Bookstore-API/automation
         env:
           BASE_URL: http://127.0.0.1:8081
+          UI_BASE_URL: http://127.0.0.1:8081
         run: mvn -B test
+      - name: Run Postman collection with Newman
+        working-directory: QA-Portfolio/Online-Bookstore-API
+        run: |
+          npx --yes newman run postman/Online-Bookstore.postman_collection.json --reporters cli,junit --reporter-junit-export automation/target/newman-results.xml
+      - name: Upload reports, screenshots and app logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bookstore-test-evidence
+          path: |
+            QA-Portfolio/Online-Bookstore-API/automation/target/surefire-reports/
+            QA-Portfolio/Online-Bookstore-API/automation/target/newman-results.xml
+            QA-Portfolio/Online-Bookstore-API/automation/evidence/screenshots/
+            /tmp/bookstore.log
+          if-no-files-found: warn
+          retention-days: 30
