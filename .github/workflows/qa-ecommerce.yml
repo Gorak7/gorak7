@@ -1,0 +1,74 @@
+name: QA Portfolio - E-commerce UI regression
+on:
+  push:
+    paths:
+      - 'QA-Portfolio/Ecommerce-Automation/**'
+      - '.github/workflows/qa-ecommerce.yml'
+  pull_request:
+    paths:
+      - 'QA-Portfolio/Ecommerce-Automation/**'
+      - '.github/workflows/qa-ecommerce.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  e-commerce:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_DATABASE: ecommerce
+          MYSQL_USER: qa_user
+          MYSQL_PASSWORD: qa_password
+        ports:
+          - 3307:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot_password"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - uses: browser-actions/setup-chrome@v1
+      - name: Build backend
+        working-directory: QA-Portfolio/Ecommerce-Automation/backend
+        run: mvn -B clean package -DskipTests
+      - name: Start app and wait for health
+        working-directory: QA-Portfolio/Ecommerce-Automation/backend
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3307/ecommerce?connectTimeout=10000
+          SPRING_DATASOURCE_USERNAME: qa_user
+          SPRING_DATASOURCE_PASSWORD: qa_password
+        run: |
+          nohup java -jar target/ecommerce-app-1.0.0.jar > /tmp/ecommerce.log 2>&1 &
+          for i in {1..60}; do
+            if curl --silent --fail http://127.0.0.1:8080/api/health; then
+              echo "Application is healthy"
+              exit 0
+            fi
+            sleep 2
+          done
+          cat /tmp/ecommerce.log
+          exit 1
+      - name: Run Selenium/TestNG UI tests and capture screenshots
+        working-directory: QA-Portfolio/Ecommerce-Automation/automation
+        env:
+          BASE_URL: http://127.0.0.1:8080
+          HEADLESS: 'true'
+        run: mvn -B test
+      - name: Upload test reports, screenshots, and application log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecommerce-test-evidence
+          path: |
+            QA-Portfolio/Ecommerce-Automation/automation/target/surefire-reports/
+            QA-Portfolio/Ecommerce-Automation/automation/evidence/screenshots/
+            /tmp/ecommerce.log
+          if-no-files-found: warn
+          retention-days: 30
