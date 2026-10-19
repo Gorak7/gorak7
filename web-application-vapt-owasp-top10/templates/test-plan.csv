@@ -1,0 +1,11 @@
+Test ID,Area,Test objective,OWASP Top 10 mapping,WSTG mapping,Role,Method,Result,Finding ID,Notes
+PLAN-001,Access control,Verify users cannot access another role's restricted resources,Access Control,Select applicable WSTG access-control test,Low-privilege test user,Manual,Not tested,,
+PLAN-002,Authentication,Review login and account recovery behavior,Authentication Failures,Select applicable WSTG authentication test,Test account,Manual,Not tested,,
+PLAN-003,Session management,Review cookie attributes and session lifecycle,Authentication Failures / Cryptographic Failures,Select applicable WSTG session test,Test account,Proxy review,Not tested,,
+PLAN-004,Input validation,Review input handling and server-side validation,Injection,Select applicable WSTG input-validation test,Test account,Manual,Not tested,,
+PLAN-005,Security configuration,Review headers, error handling, and exposed debug details,Security Misconfiguration,Select applicable WSTG configuration test,Unauthenticated / test account,Proxy review,Not tested,,
+PLAN-006,Dependencies,Review disclosed component versions and dependency hygiene,Vulnerable and Outdated Components,Select applicable WSTG component test,Not applicable,Passive review,Not tested,,
+PLAN-007,Data protection,Review sensitive data exposure and transport protections,Cryptographic Failures,Select applicable WSTG cryptography test,Test account,Proxy review,Not tested,,
+PLAN-008,Logging and errors,Review security-relevant logging and error disclosure,Security Misconfiguration / Security Logging and Monitoring Failures,Select applicable WSTG error-handling test,Test account,Manual,Not tested,,
+PLAN-009,Business logic,Check workflow rules and server-side enforcement,Insecure Design,Select applicable WSTG business-logic test,Test account,Manual,Not tested,,
+PLAN-010,API authorization,Review authorization and input validation on in-scope API routes,Access Control / Injection,Select applicable WSTG API test,Test account,Manual,Not tested,,
