@@ -1,0 +1,87 @@
+name: Portfolio evidence
+on:
+  push:
+    paths:
+      - "projects/frontend-portfolio-roadmap/**"
+      - ".github/workflows/portfolio-evidence.yml"
+  pull_request:
+    paths:
+      - "projects/frontend-portfolio-roadmap/**"
+      - ".github/workflows/portfolio-evidence.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test-and-capture:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: projects/frontend-portfolio-roadmap
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install your-ui dependencies
+        working-directory: projects/frontend-portfolio-roadmap/your-ui
+        run: npm install
+      - name: Run your-ui unit tests
+        working-directory: projects/frontend-portfolio-roadmap/your-ui
+        run: npm test
+      - name: Build your-ui
+        working-directory: projects/frontend-portfolio-roadmap/your-ui
+        run: npm run build
+      - name: Install SyncBoard client
+        working-directory: projects/frontend-portfolio-roadmap/syncboard/client
+        run: npm install
+      - name: Build SyncBoard client
+        working-directory: projects/frontend-portfolio-roadmap/syncboard/client
+        run: npm run build
+      - name: Install SyncBoard server
+        working-directory: projects/frontend-portfolio-roadmap/syncboard/server
+        run: npm install
+      - name: Typecheck SyncBoard server
+        working-directory: projects/frontend-portfolio-roadmap/syncboard/server
+        run: npm run typecheck
+      - name: Build SyncBoard server
+        working-directory: projects/frontend-portfolio-roadmap/syncboard/server
+        run: npm run build
+      - name: Install evidence tooling
+        working-directory: projects/frontend-portfolio-roadmap/evidence
+        run: npm install
+      - name: Install Chromium
+        working-directory: projects/frontend-portfolio-roadmap/evidence
+        run: npx playwright install --with-deps chromium
+      - name: Run browser tests, accessibility scans and screenshots
+        working-directory: projects/frontend-portfolio-roadmap/evidence
+        run: npm run test:e2e
+      - name: Upload test reports and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-test-evidence
+          path: |
+            projects/frontend-portfolio-roadmap/evidence/test-results/
+            projects/frontend-portfolio-roadmap/evidence/playwright-report/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Configure Chromium for Lighthouse
+        working-directory: projects/frontend-portfolio-roadmap/evidence
+        run: echo "CHROME_PATH=$(find ~/.cache/ms-playwright -type f -name chrome -perm -u+x | head -n 1)" >> "$GITHUB_ENV"
+      - name: Run Lighthouse performance audits
+        if: always()
+        working-directory: projects/frontend-portfolio-roadmap/evidence
+        run: npm run audit:lighthouse
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-lighthouse-reports
+          path: projects/frontend-portfolio-roadmap/evidence/lighthouse-reports/
+          if-no-files-found: warn
+          retention-days: 30
