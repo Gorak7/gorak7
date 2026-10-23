@@ -26,12 +26,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-          cache-dependency-path: |
-            projects/frontend-portfolio-roadmap/your-ui/package.json
-            projects/frontend-portfolio-roadmap/syncboard/client/package.json
-            projects/frontend-portfolio-roadmap/syncboard/server/package.json
-            projects/frontend-portfolio-roadmap/evidence/package.json
       - name: Install your-ui dependencies
         working-directory: projects/frontend-portfolio-roadmap/your-ui
         run: npm install
