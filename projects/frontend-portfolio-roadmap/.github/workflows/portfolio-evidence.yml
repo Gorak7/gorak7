@@ -69,3 +69,16 @@ jobs:
             projects/frontend-portfolio-roadmap/evidence/playwright-report/
           if-no-files-found: warn
           retention-days: 30
+
+      - name: Run Lighthouse performance audits
+        if: always()
+        working-directory: projects/frontend-portfolio-roadmap/evidence
+        run: npm run audit:lighthouse
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-lighthouse-reports
+          path: projects/frontend-portfolio-roadmap/evidence/lighthouse-reports/
+          if-no-files-found: warn
+          retention-days: 30
