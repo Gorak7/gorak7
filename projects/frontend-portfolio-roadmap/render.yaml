@@ -18,9 +18,25 @@ services:
       sizeGB: 1
   - type: web
     name: syncboard-ui
-    runtime: docker
+    type: web
+    runtime: static
     rootDir: projects/frontend-portfolio-roadmap/syncboard/client
-    dockerfilePath: ./Dockerfile
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
     envVars:
       - key: VITE_WS_URL
         value: wss://syncboard-api.onrender.com/ws
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+  - type: web
+    name: your-ui
+    runtime: static
+    rootDir: projects/frontend-portfolio-roadmap/your-ui
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
