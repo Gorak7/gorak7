@@ -29,6 +29,9 @@ jobs:
       - name: Install your-ui dependencies
         working-directory: projects/frontend-portfolio-roadmap/your-ui
         run: npm install
+      - name: Run your-ui unit tests
+        working-directory: projects/frontend-portfolio-roadmap/your-ui
+        run: npm test
       - name: Build your-ui
         working-directory: projects/frontend-portfolio-roadmap/your-ui
         run: npm run build
