@@ -2,7 +2,7 @@
   "ci": {
     "collect": {
       "url": ["http://127.0.0.1:4173", "http://127.0.0.1:5173"],
-      "startServerCommand": "npm run dev -- --host 127.0.0.1 --port 4173 & (cd ../syncboard/server && npm run dev) & (cd ../syncboard/client && npm run dev -- --host 127.0.0.1 --port 5173) & wait",
+      "startServerCommand": "(cd ../your-ui && npm run dev -- --host 127.0.0.1 --port 4173) & (cd ../syncboard/server && npm run dev) & (cd ../syncboard/client && npm run dev -- --host 127.0.0.1 --port 5173) & wait",
       "startServerReadyPattern": "ready|listening|Local:",
       "numberOfRuns": 3,
       "settings": { "preset": "desktop" }
