@@ -22,7 +22,7 @@ test("SyncBoard accessibility scan has no serious or critical axe violations", a
 
 test("SyncBoard queues a task locally while offline", async ({ page, context }) => {
   await page.goto("http://127.0.0.1:5173");
-  await page.evaluate(() => navigator.serviceWorker?.ready);
+  await page.evaluate(async () => { if ("serviceWorker" in navigator) await navigator.serviceWorker.ready; return true; });
   await context.setOffline(true);
   await page.getByLabel("Add a task").fill("Queued while offline");
   await page.getByRole("button", { name: "+ Add task" }).click();
