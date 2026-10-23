@@ -3,7 +3,7 @@
 Blueprint based on the supplied 8-week roadmap. Build **your-ui** first, then reuse it in **syncboard**.
 
 - [your-ui](./your-ui/README.md): React/TypeScript accessible component library and playground.
-- [syncboard](./syncboard/README.md): collaborative Kanban board with a React client and Fastify/WebSocket server starter.
+- [syncboard](./syncboard/README.md): collaborative Kanban board with a React client, Fastify API, SQLite persistence, WebSocket synchronization and IndexedDB offline queue.
 
 ## Roadmap
 Weeks 1–3: design tokens, accessible components, component tests and documentation.
