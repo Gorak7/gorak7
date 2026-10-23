@@ -1,0 +1,12 @@
+{
+  "name": "frontend-portfolio-evidence",
+  "private": true,
+  "type": "module",
+  "scripts": { "test:e2e": "playwright test", "test:e2e:report": "playwright show-report", "audit:lighthouse": "lhci autorun" },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@playwright/test": "^1.49.1",
+    "@lhci/cli": "^0.14.0",
+    "typescript": "^5.7.2"
+  }
+}
