@@ -70,6 +70,9 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
 
+      - name: Configure Chromium for Lighthouse
+        working-directory: projects/frontend-portfolio-roadmap/evidence
+        run: echo "CHROME_PATH=$(find ~/.cache/ms-playwright -type f -name chrome -perm -u+x | head -n 1)" >> "$GITHUB_ENV"
       - name: Run Lighthouse performance audits
         if: always()
         working-directory: projects/frontend-portfolio-roadmap/evidence
