@@ -44,6 +44,9 @@ jobs:
       - name: Typecheck SyncBoard server
         working-directory: projects/frontend-portfolio-roadmap/syncboard/server
         run: npm run typecheck
+      - name: Build SyncBoard server
+        working-directory: projects/frontend-portfolio-roadmap/syncboard/server
+        run: npm run build
       - name: Install evidence tooling
         working-directory: projects/frontend-portfolio-roadmap/evidence
         run: npm install
