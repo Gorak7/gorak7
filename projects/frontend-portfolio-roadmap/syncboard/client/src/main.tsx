@@ -171,4 +171,5 @@ function App() {
     <footer>Local edits persist in IndexedDB. Server mutations use IDs and version checks; conflicts require an explicit choice.</footer>
   </main>;
 }
+if ("serviceWorker" in navigator) window.addEventListener("load", () => { void navigator.serviceWorker.register("/sw.js").catch(() => undefined); });
 createRoot(document.getElementById("root")!).render(<React.StrictMode><App /></React.StrictMode>);
