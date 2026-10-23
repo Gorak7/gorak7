@@ -114,6 +114,7 @@ app.post("/api/cards", async (request, reply) => {
   if (result.status !== 200) return reply.code(result.status).send(result.body);
   return reply.code(201).send({ card: selectCard.get(parsed.data.id), ...result.body });
 });
+app.addHook("onClose", async () => { for (const client of clients) client.close(); db.close(); });
 await app.listen({ port: Number(process.env.PORT ?? 3001), host: "0.0.0.0" });
 const wss = new WebSocketServer({ server: app.server, path: "/ws" });
 wss.on("connection", socket => {
