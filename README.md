@@ -131,3 +131,38 @@ A full-stack QA project with a user-directory front end, REST CRUD API, database
 Full-stack QA demo featuring product search, shopping cart, checkout, REST endpoints, H2 order persistence, Selenium UI regression tests, API tests, failure screenshot capture, a detailed test plan, and GitHub Actions workflow.
 
 🔗 [View Project](./E-Commerce-Website-Testing-Automation/)
+
+
+## Python Automation & Reliability Engineering Projects
+
+Three end-to-end projects focused on IT operations, troubleshooting, and repeatable automation. Each includes a README, runnable code, configuration, sample data or tests, and clear safety guidance.
+
+### 1. System Health Monitor
+**Python | psutil | YAML | Rotating Logs | Webhook Alerts | pytest**
+
+Collects CPU, memory, disk and top-process metrics, writes JSONL history, applies configurable thresholds and alert cooldowns, and supports continuous or one-shot runs.
+
+[Open System Health Monitor](./System-Health-Monitor/)
+
+### 2. Log Analyzer & Incident Summary
+**Python | Regex | Streaming Parsing | CLI | JSON/HTML Reports | pytest**
+
+Analyzes authorized web and SSH logs, flags server-error spikes and repeated login failures, and produces incident-oriented evidence and remediation recommendations.
+
+[Open Log Analyzer](./Log-Analyzer-Incident-Summary/)
+
+### 3. Network & Uptime Checker
+**Python | Flask | SQLite | APScheduler | Docker | Chart.js**
+
+Checks HTTP and TCP targets on a schedule, records latency and status history, identifies repeated failures, and provides a lightweight dashboard for status and rolling availability. This is the only project in this group with a dashboard.
+
+[Open Uptime Checker](./Network-Uptime-Checker/)
+
+### Shared engineering practices
+- Automated pytest checks through GitHub Actions
+- Configuration separated from application code
+- Environment variables for webhook secrets
+- Docker packaging for the uptime checker
+- Synthetic sample logs and reproducible local setup instructions
+
+> These are portfolio implementations and should be run and tested in your own environment before claiming measured performance or production readiness. Monitor only systems you own or have explicit permission to test.
