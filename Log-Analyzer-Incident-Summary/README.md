@@ -18,3 +18,23 @@ python analyze.py --file sample_logs/auth.log --format json --output report.json
 pytest -q
 ```
 Only analyze logs you are authorized to access. Detection thresholds are configurable CLI options and should be tuned to the environment.
+
+## Architecture
+
+```mermaid
+flowchart TD
+  A[Authorized log file] --> B[Streaming parser]
+  B --> C[Access-log and SSH patterns]
+  C --> D[Counters and threshold rules]
+  D --> E[Findings and evidence]
+  E --> F[JSON report]
+  E --> G[Self-contained HTML report]
+```
+
+## Test evidence
+
+Run `pytest -q` from this directory. Tests check the included synthetic access/authentication samples and empty-file handling. CI results are available in the repository's Actions tab; only report a pass after a completed green run.
+
+## Screenshot evidence
+
+Generate the sample HTML report using the command above, open `report.html` in a browser, and capture the summary/findings section. The included logs are synthetic demonstration data, not real incident evidence.
