@@ -22,3 +22,23 @@ Set `ALERT_WEBHOOK_URL` to enable webhook alerts. Tune `config.yaml` before use.
 
 ## Operational notes
 Run only on systems you administer. Keep webhook URLs private. Thresholds are examples; tune them to reduce noisy alerts.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  A[CLI / scheduler] --> B[psutil collectors]
+  B --> C[Threshold evaluator]
+  C --> D[Cooldown and alert handler]
+  B --> E[JSONL metrics history]
+  C --> F[Rotating application logs]
+  D --> G[Optional webhook]
+```
+
+## Test evidence
+
+Run `pytest -q` from this directory. The tests cover alert cooldown behavior and configuration loading. Do not treat a local test result as verified until you have run the command and captured its output. CI results are available under the repository's Actions tab.
+
+## Screenshot evidence
+
+Capture a terminal screenshot after running `python monitor.py --once`, showing the metrics collection message and the generated `data/metrics.jsonl` file. Do not use fabricated metrics as production evidence.
