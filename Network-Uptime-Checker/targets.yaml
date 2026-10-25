@@ -1,0 +1,12 @@
+interval_seconds: 60
+consecutive_failures_for_down: 3
+targets:
+  - name: Example HTTP
+    type: http
+    address: https://example.com
+    timeout_seconds: 5
+  - name: Example DNS TCP
+    type: tcp
+    host: 1.1.1.1
+    port: 53
+    timeout_seconds: 3
