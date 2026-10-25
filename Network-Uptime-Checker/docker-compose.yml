@@ -1,0 +1,14 @@
+services:
+  uptime-checker:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      PORT: "5000"
+      # Optional: set ALERT_WEBHOOK_URL in your shell/.env; never commit secrets.
+      ALERT_WEBHOOK_URL: ${ALERT_WEBHOOK_URL:-}
+    volumes:
+      - uptime-data:/app/data
+    restart: unless-stopped
+volumes:
+  uptime-data:
