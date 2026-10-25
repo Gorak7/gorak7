@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.pytest_cache/
+.coverage
+htmlcov/
+System-Health-Monitor/data/
+System-Health-Monitor/logs/
+Network-Uptime-Checker/data/
+Network-Uptime-Checker/uptime.db
+Network-Uptime-Checker/uptime.db-*
+report.html
+report.json
