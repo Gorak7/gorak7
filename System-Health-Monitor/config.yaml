@@ -1,0 +1,6 @@
+thresholds:
+  cpu_percent: 85
+  memory_percent: 90
+  disk_percent: 90
+alert_cooldown_seconds: 900
+webhook_enabled: false
