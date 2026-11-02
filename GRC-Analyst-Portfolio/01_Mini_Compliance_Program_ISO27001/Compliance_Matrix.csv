@@ -1,0 +1,16 @@
+Control ID,Control Name,Current Status,Owner Role,Assessment Evidence,Gap / Action
+A.5.1,Policies for information security,Planned,GRC Lead,Not provided,Create policy and retain approval/communication evidence
+A.5.2,Information security roles and responsibilities,Planned,GRC Lead,Not provided,Define accountable control owners and RACI
+A.5.9,Inventory of information and associated assets,Planned,IT Operations,Not provided,Validate asset inventory and review quarterly
+A.5.15,Access control,Planned,IAM Administrator,Not provided,Define least-privilege access rules
+A.5.16,Identity management,Planned,IAM Administrator,Not provided,Document joiner/mover/leaver workflow
+A.5.17,Authentication information,Planned,IAM Administrator,Not provided,Review password and secrets handling
+A.5.18,Access rights,Planned,System Owners,Not provided,Perform and evidence periodic access reviews
+A.5.23,Information security for use of cloud services,Planned,Cloud Operations Lead,Not provided,Define cloud security requirements and provider reviews
+A.5.24,Incident management planning and preparation,Planned,Security Lead,Not provided,Approve incident response plan and escalation paths
+A.5.25,Assessment and decision on security events,Planned,Security Lead,Not provided,Define severity criteria and triage workflow
+A.5.30,ICT readiness for business continuity,Planned,IT Operations,Not provided,Define recovery objectives and test restoration
+A.6.3,Information security awareness training,Planned,HR / Security,Not provided,Schedule training and track completion
+A.7.7,Clear desk and clear screen,Planned,Facilities / IT,Not provided,Publish guidance and retain awareness evidence
+A.8.8,Management of technical vulnerabilities,Planned,IT Operations,Not provided,Establish scanning cadence and remediation SLAs
+A.8.13,Information backup,Planned,Cloud Operations Lead,Not provided,Document backup scope and conduct restore tests
