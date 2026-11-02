@@ -1,0 +1,26 @@
+Q ID,Domain,Question,Response,Score,Evidence Reference,Reviewer Note
+Q01,Governance,Approved information security policy exists,Partial,1,PUB-01,Public security documentation exists; policy approval record not inspected
+Q02,Governance,Security roles and responsibilities formally assigned,Partial,1,PUB-01,Detailed role assignment evidence not inspected
+Q03,Governance,Periodic security risk assessments performed,Partial,1,PUB-02,Public assurance material found; internal risk assessment not public
+Q04,Governance,Asset inventory maintained,Not Reviewed,,N/A,No public inventory sample reviewed
+Q05,Governance,Policies reviewed at least annually,Not Reviewed,,N/A,No policy review history inspected
+Q06,Access Control,MFA enforced for privileged accounts,Partial,1,PUB-03,Feature supported; customer enforcement must be verified
+Q07,Access Control,Access rights follow least privilege,Partial,1,PUB-04,Customer tenant role configuration not reviewed
+Q08,Access Control,Access rights reviewed periodically,Not Reviewed,,N/A,No customer access review export inspected
+Q09,Access Control,Accounts disabled promptly after termination,Partial,1,PUB-04,Provider process described; no sample evidence inspected
+Q10,Access Control,Privileged activities logged and monitored,Yes,2,PUB-05,Audit-log capability documented; edition/retention require validation
+Q11,Data Protection,Customer data encrypted in transit,Yes,2,PUB-06,Public whitepaper states encryption in transit by default
+Q12,Data Protection,Customer data encrypted at rest,Yes,2,PUB-06,Public whitepaper states stored content encrypted at rest
+Q13,Data Protection,Retention and secure deletion documented,Partial,1,PUB-07,Terms exist; tenant settings and deletion evidence not reviewed
+Q14,Data Protection,Production and non-production data separated,Not Reviewed,,N/A,No service-specific architecture evidence reviewed
+Q15,Data Protection,Backups protected and restoration tested,Partial,1,PUB-08,Provider recovery process described; customer-specific restore evidence absent
+Q16,Incident Response,Documented incident response plan,Yes,2,PUB-08,Public data incident response process exists
+Q17,Incident Response,Incidents classified by severity,Partial,1,PUB-08,Public process references assessment; full severity matrix not inspected
+Q18,Incident Response,Customer notification within defined timelines,Yes,2,PUB-08,Public process describes notification where appropriate
+Q19,Incident Response,Incident exercises conducted periodically,Not Reviewed,,N/A,No exercise report reviewed
+Q20,Incident Response,Forensic evidence preserved when required,Partial,1,PUB-08,Investigation described; no case evidence reviewed
+Q21,Compliance,Independent security assurance report/certification available,Yes,2,PUB-02,Assurance offerings listed; current report scope must be confirmed
+Q22,Compliance,Subprocessors identified and assessed,Not Reviewed,,N/A,Current subprocessor register not reviewed
+Q23,Compliance,Privacy obligations and data processing terms documented,Yes,2,PUB-07,Published DPA/terms found; contract version needs validation
+Q24,Compliance,Vulnerabilities remediated within defined timelines,Partial,1,PUB-01,High-level practices described; no remediation sample inspected
+Q25,Compliance,Customer security requests and evidence process exists,Partial,1,PUB-09,Trust Center available; customer assurance SLA not tested
