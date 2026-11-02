@@ -1,0 +1,15 @@
+Evidence ID,Evidence Item,Source URL,Evidence Type,Review Notes
+PUB-01,Google Workspace Security Whitepaper – Access and Authentication,https://workspace.google.com/learn-more/security/security-whitepaper/access-and-authentication/,Official public provider documentation,Describes provider capabilities; not an audit report
+PUB-02,Google Workspace Supporting Compliance Requirements,https://workspace.google.com/learn-more/security/security-whitepaper/page-5/,Official public provider documentation,Confirm current certificate/report scope and validity
+PUB-03,Google Workspace Security Whitepaper – Data Access and Restrictions,https://workspace.google.com/learn-more/security/security-whitepaper/page-7/,Official public provider documentation,Provider controls do not prove customer configuration
+PUB-04,Google Workspace Security Whitepaper – Reporting Analytics,https://workspace.google.com/learn-more/security/security-whitepaper/reporting-analytics/,Official public provider documentation,Validate edition and log retention settings
+PUB-05,Google Cloud Security Overview,https://docs.cloud.google.com/docs/security/overview/whitepaper,Official public provider documentation,Confirm exact service scope
+PUB-06,Google Workspace Trust Whitepaper,https://services.google.com/fh/files/misc/google_workspace_trust_whitepaper_jan2023.pdf,Official provider whitepaper,January 2023 document; obtain latest revision
+PUB-07,Google Workspace Data Processing Amendment,https://admin.google.com/terms/apps/7/1/en/dpa_terms.html,Published terms,Confirm current version and executed contract
+PUB-08,Google Cloud Data Incident Response Process,https://docs.cloud.google.com/docs/security/incident-response,Official public provider documentation,No customer-specific SLA or incident sample reviewed
+PUB-09,Google Cloud Trust Center,https://cloud.google.com/trust-center,Official public provider documentation,Restricted assurance reports require authorized access
+GAP-01,Current SOC 2 Type II report,Not publicly inspected,Restricted assurance evidence,Request through authorized customer channel
+GAP-02,Current ISO certificate,Not independently inspected,Certificate evidence,Validate scope issuer and expiry
+GAP-03,Current subprocessor register,Not reviewed,Vendor operational evidence,Request list locations and change notice terms
+GAP-04,Customer tenant MFA/admin/access reviews,Not reviewed,Customer configuration evidence,Inspect tenant and dated access review export
+GAP-05,Backup/restore and incident exercise evidence,Not reviewed,Restricted operational evidence,Request service-specific evidence
