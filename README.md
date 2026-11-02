@@ -166,3 +166,22 @@ Checks HTTP and TCP targets on a schedule, records latency and status history, i
 - Synthetic sample logs and reproducible local setup instructions
 
 > These are portfolio implementations and should be run and tested in your own environment before claiming measured performance or production readiness. Monitor only systems you own or have explicit permission to test.
+
+
+## GRC Analyst Portfolio Projects
+
+### 1. Mini Compliance Program – ISO 27001:2022
+**ISO/IEC 27001:2022 Annex A | Asset Inventory | Compliance Matrix | Gap Assessment | Remediation Plan**
+
+A scenario-based baseline assessment for fictional company NovaCloud AI Solutions. Includes a 15-control sample compliance matrix, asset inventory, control owners, gap action plan and management summary. Since no internal company artifacts were supplied, controls are explicitly marked as planned / not evidenced; this is a tabletop baseline, not an assertion about a real organization.
+
+[Open Project 1](./GRC-Analyst-Portfolio/01_Mini_Compliance_Program_ISO27001/)
+
+### 2. Third-Party Vendor Risk Assessment – Google Workspace
+**Third-Party Risk | Security Questionnaire | Evidence Review | Risk Scoring | Vendor Due Diligence**
+
+A 25-question public-source desktop review of Google Workspace for the fictional buyer NovaCloud AI Solutions. The preliminary review assessed 19 questions and left 6 as Not Reviewed. The illustrative score is 68.4% of reviewed items (provisional HIGH / evidence follow-up required). Recommendation: defer final approval until current service-scoped assurance reports, contract/DPA, subprocessor details and customer-tenant configuration evidence are reviewed.
+
+[Open Project 2](./GRC-Analyst-Portfolio/02_Third_Party_Vendor_Risk_Assessment/)
+
+**Assessment integrity:** Project 1 is a fictional tabletop exercise. Project 2 relies on public provider documentation, not restricted audit reports or customer tenant access. Neither project is an independent audit, certification, penetration test or actual procurement approval. Public sources and evidence limitations are documented inside each project.
