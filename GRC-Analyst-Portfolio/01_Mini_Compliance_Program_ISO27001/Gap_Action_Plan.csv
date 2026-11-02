@@ -1,0 +1,11 @@
+Action ID,Related Control,Gap,Recommended Action,Priority,Owner,Status
+ACT-01,A.5.1,No policy approval evidence,Create and approve information security policy,High,GRC Lead,Open
+ACT-02,A.5.2,No control owner register,Create RACI and assign control owners,High,GRC Lead,Open
+ACT-03,A.5.9,No asset inventory evidence,Validate inventory and assign owners,High,IT Operations,Open
+ACT-04,A.5.15,A.5.18,No access policy or review evidence,Define least privilege and conduct periodic access review,High,IAM Administrator,Open
+ACT-05,A.5.16,No identity lifecycle evidence,Document joiner/mover/leaver process and sample tickets,High,IAM Administrator,Open
+ACT-06,A.5.23,No cloud security review evidence,Create cloud baseline and provider review checklist,High,Cloud Operations Lead,Open
+ACT-07,A.5.24,A.5.25,No incident response evidence,Approve response plan, severity matrix and tabletop record,High,Security Lead,Open
+ACT-08,A.5.30,A.8.13,No recovery test evidence,Define recovery objectives and perform restore test,High,IT Operations,Open
+ACT-09,A.8.8,No vulnerability remediation evidence,Define scan cadence and remediation SLAs,High,IT Operations,Open
+ACT-10,A.6.3,No training completion evidence,Schedule awareness training and retain completion logs,Medium,HR / Security,Open
