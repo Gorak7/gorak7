@@ -1,0 +1,7 @@
+Domain,Assessed Questions,Maximum Score,Earned Score,Coverage,Key Follow-up
+Governance,3,6,3,50%,Get policy approvals, risk assessment and asset inventory evidence
+Access Control,4,8,5,62.5%,Verify tenant settings, access review and admin logging
+Data Protection,4,8,6,75%,Verify retention, service boundary and restore evidence
+Incident Response,4,8,6,75%,Obtain exercise evidence and confirm severity/notification terms
+Compliance,4,8,6,75%,Obtain current assurance reports and subprocessor evidence
+Overall,19,38,26,68.4%,Provisional HIGH / evidence follow-up required; 6 questions remain Not Reviewed
