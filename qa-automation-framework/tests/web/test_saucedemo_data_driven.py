@@ -21,4 +21,5 @@ def test_each_product_can_be_added_and_removed(signed_in,index):
 @pytest.mark.parametrize("index",range(6))
 def test_each_product_opens_detail_page(signed_in,index):
     signed_in.locator(".inventory_item_name").nth(index).click()
-    assert signed_in.locator(".inventory_details").is_visible()
+    signed_in.locator(".inventory_details_container").wait_for(state="visible")
+    assert signed_in.locator(".inventory_details_container").is_visible()
