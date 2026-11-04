@@ -1,51 +1,40 @@
 # RAG Chatbot + LLM Evaluation Pipeline
 
-A testable Retrieval-Augmented Generation (RAG) reference application with document ingestion, retrieval, an API, a golden evaluation dataset, adversarial cases and a CI quality gate.
+A retrieval-augmented product-support chatbot over sample ceiling-fan documentation, with PDF/Markdown/text ingestion, persistent ChromaDB, local sentence-transformer embeddings, optional Gemini generation, FastAPI, Streamlit, a 60-case draft evaluation set and optional quality-tool integrations.
 
 ## Architecture
 ```mermaid
 flowchart LR
- D[PDF / Markdown] --> I[Ingestion and chunking]
- I --> V[ChromaDB]
- Q[Question] --> A[FastAPI /ask]
- A --> R[Retriever]
+ D[PDF / Markdown / TXT] --> I[Chunk + embed]
+ I --> V[(ChromaDB)]
+ Q[Question] --> A[FastAPI]
+ A --> R[Top-k retrieval]
  V --> R
- R --> L[LLM adapter]
- L --> O[Answer + source chunks]
- G[Golden dataset] --> E[Evaluation runner]
- O --> E
- E --> C[CI threshold gate]
+ R --> L[Gemini or context-only fallback]
+ L --> O[Answer + sources]
+ G[Golden dataset] --> E[Source-hit / Ragas / DeepEval]
+ E --> C[CI checks]
+ P[promptfoo] --> L
+ L --> T[Optional LangSmith tracing]
 ```
 
-## Stack
-Python 3.11+, FastAPI, ChromaDB, sentence-transformers, pytest, Ragas/DeepEval integration points, promptfoo, optional LangSmith tracing.
-
-## Quick start
-1. Create an environment: `python -m venv .venv`
-2. Activate it and install: `pip install -r requirements.txt`
-3. Copy `.env.example` to `.env` and configure a provider only if using live generation.
-4. Run API: `uvicorn src.api:app --reload`
-5. Run tests: `pytest -q`
-
-The default adapter is deterministic and local so tests do not require paid API access. Replace it with a provider adapter for live LLM experiments. Never commit credentials.
+## Setup
+```bash
+python -m venv .venv
+# Windows: .venv\\Scripts\\activate
+# macOS/Linux: source .venv/bin/activate
+pip install -r requirements.txt
+# Copy .env.example to .env and set GEMINI_API_KEY if desired
+python -m src.ingest
+uvicorn src.api:app --reload
+```
+Open `http://127.0.0.1:8000/docs`. In another terminal run `streamlit run app/dashboard.py`. Without a Gemini key, the system returns retrieved context excerpts rather than generating a model answer.
 
 ## Evaluation
-- Add question, reference answer and expected source IDs to `data/golden_dataset.json`.
-- Evaluate faithfulness, answer relevancy, context precision and context recall when an LLM judge/provider is configured.
-- Run adversarial inputs from `evals/redteam_cases.json`.
-- CI runs deterministic tests and the quality gate. Configure real evaluation scores only after collecting reproducible results.
+- `pytest -q tests`: deterministic API and chunking checks.
+- `python -m evals.evaluate`: writes a source-hit CSV from the 60-case draft dataset.
+- `pip install -r requirements-eval.txt`: installs optional Ragas/DeepEval/LangSmith packages.
+- `npx promptfoo eval -c evals/promptfooconfig.yaml`: prompt-level assertions (requires promptfoo and Gemini credentials).
 
-## Project milestones
-- [x] API skeleton, local baseline, data contracts and deterministic tests
-- [ ] PDF/Markdown ingestion and persistent vector indexing
-- [ ] 60–100 reviewed golden Q/A cases
-- [ ] Ragas and DeepEval metrics with documented judge/model settings
-- [ ] promptfoo model/prompt comparison and LangSmith traces
-- [ ] 20+ red-team cases and CI regression threshold
-- [ ] Record real before/after results and demo
-
-## Evidence
-Store sanitized screenshots, evaluation CSV/HTML, CI runs and a short demo under `docs/evidence/`. Do not claim metrics until the run artifacts support them.
-
-## Limitations
-LLM-as-judge scores are estimates and can be biased or variable. Use human review, fixed evaluation sets and explicit thresholds. The local baseline is for engineering tests, not a substitute for a production LLM.
+## Important limitations
+The 60 golden cases are generated draft cases and require human review before being called a validated benchmark. The CSV runner measures source-hit only; it does not yet produce Ragas faithfulness/context metrics or DeepEval judge scores. LLM judge evaluation needs explicit model configuration, cost controls and human spot-checking. LangSmith tracing is opt-in and requires environment configuration. No quality percentages are claimed until reproducible reports are generated.
