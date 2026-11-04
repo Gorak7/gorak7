@@ -14,3 +14,10 @@ def test_runner_blocks_remote_hosts():
 def test_runner_blocks_non_local_http():
  case=generate_baseline(load_spec(SPEC))[0]
  with pytest.raises(ValueError): execute_case(case,'http://example.com')
+
+def test_baseline_includes_local_execution_data():
+    cases=generate_baseline(load_spec(SPEC))
+    speed=next(c for c in cases if c.operation_id=="updateSpeed")
+    assert speed.path=="/devices/fan-001/speed"
+    assert speed.body=={"speed":3}
+    assert speed.headers["Authorization"]=="Bearer demo-token"
