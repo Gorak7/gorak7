@@ -172,7 +172,7 @@ jobs:
       - name: Run generator contract tests and HTTP mutation suite
         run: pytest -q
       - name: Save mutation report
-        run: python -m mutants.mutation_lab > reports/mutation-report.json
+        run: mkdir -p reports && python -m mutants.mutation_lab > reports/mutation-report.json
       - name: Upload generator and mutation evidence
         if: always()
         uses: actions/upload-artifact@v4
