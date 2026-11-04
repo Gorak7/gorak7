@@ -1,0 +1,5 @@
+[
+  {"id":"G001","question":"What should I do before cleaning the fan?","reference_answer":"Disconnect power before cleaning.","expected_sources":["docs/fan_manual.md"],"category":"factual"},
+  {"id":"G002","question":"What should I check if the fan does not start?","reference_answer":"Check the power supply and remote batteries.","expected_sources":["docs/faq.md"],"category":"factual"},
+  {"id":"G003","question":"What is the warranty period?","reference_answer":"The supplied documents do not specify a warranty period.","expected_sources":[],"category":"unanswerable"}
+]
