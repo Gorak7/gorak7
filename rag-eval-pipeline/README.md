@@ -1,6 +1,6 @@
 # RAG Chatbot + LLM Evaluation Pipeline
 
-A retrieval-augmented product-support chatbot over sample ceiling-fan documentation, with PDF/Markdown/text ingestion, persistent ChromaDB, local sentence-transformer embeddings, optional Gemini generation, FastAPI, Streamlit, a 60-case draft evaluation set and optional quality-tool integrations.
+A retrieval-augmented product-support chatbot over sample ceiling-fan documentation, with PDF/Markdown/text ingestion, ChromaDB, sentence-transformer embeddings, FastAPI, optional Gemini generation, Streamlit and reproducible evaluation scripts.
 
 ## Architecture
 ```mermaid
@@ -12,8 +12,8 @@ flowchart LR
  V --> R
  R --> L[Gemini or context-only fallback]
  L --> O[Answer + sources]
- G[Golden dataset] --> E[Source-hit / Ragas / DeepEval]
- E --> C[CI checks]
+ G[60-case dataset] --> E[Source-hit / Ragas / DeepEval]
+ E --> C[GitHub Actions]
  P[promptfoo] --> L
  L --> T[Optional LangSmith tracing]
 ```
@@ -24,19 +24,30 @@ python -m venv .venv
 # Windows: .venv\\Scripts\\activate
 # macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
-# Copy .env.example to .env and set GEMINI_API_KEY if desired
+# Optional Gemini key in .env
 python -m src.ingest
 uvicorn src.api:app --reload
 ```
-Open `http://127.0.0.1:8000/docs`. In another terminal run `streamlit run app/dashboard.py`. Without a Gemini key, the system returns retrieved context excerpts rather than generating a model answer.
+Open `http://127.0.0.1:8000/docs`; in another terminal run `streamlit run app/dashboard.py`. Without a Gemini key, answers are retrieved context excerpts, not LLM-generated responses.
 
-## Evaluation
-- `pytest -q tests`: deterministic API and chunking checks.
-- `python -m evals.evaluate`: writes a source-hit CSV from the 60-case draft dataset.
-- `pip install -r requirements-eval.txt`: installs optional Ragas/DeepEval/LangSmith packages.
-- `python -m evals.run_ragas --limit 10`: Gemini-judged faithfulness, context precision/recall and answer relevancy; use `--limit 0` for all cases.
-- `python -m evals.run_deepeval --limit 10`: Gemini-judged DeepEval answer relevancy, faithfulness and custom GEval; review actual scores and judge reasons.
-- `npx promptfoo eval -c evals/promptfooconfig.yaml`: prompt-level assertions (requires promptfoo and Gemini credentials).
+## Dataset review and deterministic evaluation
+```bash
+python -m evals.review_dataset
+python -m evals.evaluate
+```
+The 60 questions were reviewed against the two supplied sample documents and rewritten to remove templated duplicates. The script checks case count, unique IDs/questions, cited source files and category labels. The review is assistant-performed; human sign-off is still pending. The deterministic baseline reports source-file hit rate, not answer correctness or semantic faithfulness.
 
-## Important limitations
-The 60 golden cases are generated draft cases and require human review before being called a validated benchmark. The CSV runner measures source-hit only; it does not yet produce Ragas faithfulness/context metrics or DeepEval judge scores. LLM judge evaluation needs explicit model configuration, cost controls and human spot-checking. LangSmith tracing is opt-in and requires environment configuration. No quality percentages are claimed until reproducible reports are generated.
+## LLM-as-judge evaluation
+Set `GEMINI_API_KEY` in the environment before running:
+```bash
+pip install -r requirements-eval.txt
+python -m evals.run_ragas --limit 60
+python -m evals.run_deepeval --limit 60
+``
+Ragas evaluates faithfulness, context precision, context recall and answer relevancy. DeepEval evaluates answer relevancy, faithfulness and a custom GEval quality rubric. These runs incur Gemini API usage. No score should be claimed until the commands complete and their reports are inspected.
+
+## CI evidence
+The root workflow `.github/workflows/ai-quality-engineer.yml` runs the dataset review, API tests and deterministic source-hit baseline, and uploads the reports. Gemini-based Ragas/DeepEval jobs run only when the repository secret `GEMINI_API_KEY` is configured. Configure it under GitHub Settings → Secrets and variables → Actions. Android tests and API mutation tests run in their own CI jobs.
+
+## Limitations
+The sample documents are intentionally small and are not real product instructions. The 60-case set covers 20 source-grounded intents with three distinct phrasings each; it is not 60 independent knowledge facts. Human benchmark review remains required before publishing external quality claims.
