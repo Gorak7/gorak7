@@ -71,9 +71,8 @@ jobs:
           profile: pixel_2
           disable-animations: true
           script: |
-            cd qa-automation-framework
             python -m pip install --upgrade pip
-            pip install -r requirements.txt
+            pip install -r "$GITHUB_WORKSPACE/qa-automation-framework/requirements.txt"
             npm install --global appium@2
             appium driver install uiautomator2
             curl -fL https://raw.githubusercontent.com/appium/appium/master/packages/appium/sample-code/apps/ApiDemos-debug.apk -o /tmp/ApiDemos-debug.apk
@@ -84,7 +83,7 @@ jobs:
               sleep 2
             done
             curl -fsS http://127.0.0.1:4723/status
-            RUN_APPIUM=1 APPIUM_URL=http://127.0.0.1:4723 python -m pytest -m mobile --alluredir=allure-results/mobile -q
+            PYTHONPATH="$GITHUB_WORKSPACE/qa-automation-framework" RUN_APPIUM=1 APPIUM_URL=http://127.0.0.1:4723 python -m pytest "$GITHUB_WORKSPACE/qa-automation-framework/tests" -m mobile --alluredir="$GITHUB_WORKSPACE/qa-automation-framework/allure-results/mobile" -q
       - name: Upload Android test evidence
         if: always()
         uses: actions/upload-artifact@v4
