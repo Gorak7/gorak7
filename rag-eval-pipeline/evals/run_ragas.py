@@ -21,7 +21,9 @@ def main():
   result=ask(item["question"]);contexts=[x["text"] for x in result["contexts"]]
   row={"id":item["id"],"category":item["category"]}
   for name,metric in metrics.items():
-   score=metric.score(user_input=item["question"],response=result["answer"],retrieved_contexts=contexts,reference=item["expected_answer"])
+   if name=="faithfulness": score=metric.score(user_input=item["question"],response=result["answer"],retrieved_contexts=contexts)
+   elif name in {"context_precision","context_recall"}: score=metric.score(user_input=item["question"],reference=item["expected_answer"],retrieved_contexts=contexts)
+   else: score=metric.score(user_input=item["question"],response=result["answer"])
    row[name]=getattr(score,"value",score)
   rows.append(row);print(item["id"],{k:row[k] for k in metrics})
  Path("reports").mkdir(exist_ok=True)
