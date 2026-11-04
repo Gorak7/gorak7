@@ -221,7 +221,7 @@
   },
   {
     "id": "Q021",
-    "question": "Which blade-related issue should be inspected besides attachment?",
+    "question": "Besides checking that the blades are securely attached, should I inspect whether they are balanced when the fan wobbles?",
     "expected_answer": "Inspect that the blades are balanced.",
     "expected_sources": [
       "data/docs/fan_safety.md"
