@@ -35,6 +35,6 @@ def main():
         test_cases.append(LLMTestCase(input=golden["question"],actual_output=result["answer"],expected_output=golden["expected_answer"],retrieval_context=[c["text"] for c in result["contexts"]]))
     metrics=[AnswerRelevancyMetric(model=judge),FaithfulnessMetric(model=judge),GEval(name="Support tone and answer quality",criteria="Evaluate whether the answer is concise, helpful, safe, and does not claim facts beyond the supplied reference.",evaluation_params=[LLMTestCaseParams.INPUT,LLMTestCaseParams.ACTUAL_OUTPUT,LLMTestCaseParams.EXPECTED_OUTPUT],model=judge,threshold=0.7)]
     Path("reports").mkdir(exist_ok=True)
-    evaluate(test_cases=test_cases,metrics=metrics,write_cache=False)
+    evaluate(test_cases=test_cases,metrics=metrics)
     print(f"DeepEval completed for {len(test_cases)} cases. Review the DeepEval output and local run artifacts.")
 if __name__=="__main__": main()
