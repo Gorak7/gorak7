@@ -19,7 +19,7 @@ def test_delete_device_ids(new_id):
  ("get","/devices"),("get","/devices/fan-001"),("post","/devices"),("delete","/devices/fan-001")
 ])
 def test_crud_requires_auth(method,path):
- response=getattr(client,method)(path)
+ response=client.post(path,params={"device_id":"fan-999"}) if method=="post" else getattr(client,method)(path)
  assert response.status_code==401
 def test_duplicate_device_returns_conflict():
  assert client.post("/devices",headers=AUTH,params={"device_id":"fan-001"}).status_code==409
