@@ -1,6 +1,6 @@
 # AI-Assisted API Test Generator
 
-OpenAPI-to-test-case generator with typed validation, deterministic baseline, optional Gemini JSON generation, a local-only HTTP runner, quality metrics, a mutation lab and Streamlit UI.
+OpenAPI-to-test-case generator with Pydantic validation, deterministic baseline generation, optional Gemini JSON generation, a localhost-only HTTP runner, coverage metrics, Streamlit UI and HTTP-level API mutation testing.
 
 ## Run
 ```bash
@@ -12,11 +12,19 @@ streamlit run app/dashboard.py
 pytest -q
 ```
 
-## Architecture
-OpenAPI JSON → parser → prompt v1/v2 → deterministic or Gemini generator → Pydantic validation → local-only HTTP runner → coverage/validity/duplicate metrics → dashboard/export.
+## Local API execution
+Start the Project 2 FastAPI mock API on localhost, then run:
+```bash
+python -m src.cli --spec specs/device-openapi.json --run-local --base-url http://127.0.0.1:8000
+``
+The runner allows only plain HTTP to localhost/127.0.0.1 and rejects remote hosts, URL-shaped paths and path traversal. Use disposable local test targets only; never execute generated requests against production.
 
-## Safety
-The runner permits only plain HTTP to localhost/127.0.0.1. It rejects remote hosts and URL-shaped paths. Use disposable local test targets only. Never execute generated requests against production.
+## HTTP mutation testing
+```bash
+python -m mutants.mutation_lab
+pytest -q
+``
+The mutation lab creates separate FastAPI apps and sends real HTTP requests through FastAPI TestClient. It tests the baseline contract and four injected defects: off-by-one upper boundary, missing lower bound, missing upper bound and always-valid behavior. The suite reports a mutation score from the actual killed mutants. The score is valid only when the tests complete successfully in the latest CI run.
 
 ## Implemented vs remaining
-Implemented: OpenAPI operation parser, Pydantic contract, baseline and Gemini adapters, versioned prompt templates, safe runner, basic metrics, Streamlit generation/export, pure-function mutation lab and tests. Remaining: full parameter/request-body/schema extraction, execution result persistence and controlled mutant API orchestration, 30–50 meaningful generated cases, live baseline-vs-mutant API execution and DeepEval GEval evaluation. The current mutation lab validates sample speed-boundary mutants, not the full mock API. LLM expected outcomes require human review.
+Implemented: OpenAPI operation parsing, Pydantic test-case contract, deterministic and Gemini adapters, versioned prompts, local-only HTTP runner, basic operation coverage/duplicate metrics, Streamlit generation/export and API-level mutation lab. Remaining: deeper request/response schema inference, more generated negative/boundary scenarios, persisted execution history and human review of LLM-generated expectations.
