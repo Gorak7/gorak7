@@ -1,4 +1,7 @@
-pydantic>=2.6
+pydantic>=2.8
 pytest>=8.0
 httpx>=0.27
 PyYAML>=6.0
+streamlit>=1.39
+pandas>=2.2
+google-genai>=1.0
