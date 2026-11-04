@@ -17,6 +17,12 @@ For browser tests: `playwright install chromium && pytest -m web -q`
 For mobile: install Android Studio, create an emulator, install Appium 2 and UiAutomator2 driver, install ApiDemos APK, start Appium, set `RUN_APPIUM=1`, then `pytest -m mobile -q`.
 For Allure: `pytest --alluredir=allure-results` then `allure serve allure-results`.
 
+## Test inventory
+
+The current suite defines approximately 89 test scenarios: 46 API cases, 32 Playwright web cases, 10 Appium Android smoke cases and 1 Selenium smoke case. The API and Playwright suites are configured in GitHub Actions. Appium and Selenium tests are opt-in because they require a local Android emulator/Appium server or ChromeDriver. These are authored test scenarios, not a claim that all 89 have passed in CI.
+
+Run API tests with `pytest -m api -q`; run browser tests with `playwright install chromium && pytest -m web -q`; run Android tests after setup with `RUN_APPIUM=1 pytest -m mobile -q`; run Selenium with `RUN_SELENIUM=1 pytest -m web -q`.
+
 ## Evidence integrity
 The API tests are self-contained. Web tests target the public SauceDemo demo site. Appium/Selenium are opt-in because they require local browser/emulator setup. Do not count skipped tests as passed. Record actual environment versions and attach real reports/screenshots.
 
