@@ -105,6 +105,19 @@ Full-stack IOC triage console for synthetic IP/domain/URL/hash indicators, dupli
 > Both applications include synthetic sample data and local-development configuration. Run the documented tests and capture your own runtime screenshots before describing the applications as fully verified. Production deployment requires reviewing authentication, secrets, and authorization settings.
 
 
+### AI Quality Engineer Portfolio
+
+**Python | RAG | ChromaDB | Gemini | Ragas | DeepEval | promptfoo | LangSmith | Playwright | Selenium | Appium | pytest**
+
+Three portfolio projects aligned to AI Quality Engineer roles:
+
+- [RAG Chatbot + LLM Evaluation Pipeline](./rag-eval-pipeline/README.md)
+- [Web + Mobile + API Test Automation Framework](./qa-automation-framework/README.md)
+- [AI-Assisted OpenAPI Test Generator](./llm-test-generator/README.md)
+- [Portfolio implementation index](./AI-QUALITY-ENGINEER-PORTFOLIO.md)
+
+Includes source code, test suites, evaluation data, CI workflows and setup instructions. Some external integrations and emulator-based tests require local credentials/setup; consult each README for the implemented scope and verification status.
+
 ### QA Automation Portfolio
 
 **Selenium | Java | TestNG | REST Assured | Postman | MySQL | Spring Boot | CI/CD**
