@@ -1,0 +1,4 @@
+-r requirements.txt
+ragas>=0.2
+deepeval>=2.0
+langsmith>=0.1
