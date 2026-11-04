@@ -1,12 +1,11 @@
 name: RAG evaluation checks
-on: [push, pull_request]
+on: [push,pull_request]
 jobs:
-  test:
+  deterministic:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - run: pip install -r requirements.txt
-      - run: pytest -q
+        with: {python-version: "3.11"}
+      - run: pip install fastapi uvicorn pydantic python-dotenv pytest httpx
+      - run: pytest -q tests
