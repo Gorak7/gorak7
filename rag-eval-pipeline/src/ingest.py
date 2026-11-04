@@ -13,15 +13,21 @@ def chunk_text(text:str,chunk_words:int=180,overlap:int=30)->list[str]:
 def load_documents(directory:str="data/docs")->list[dict]:
  docs=[]
  for path in sorted(Path(directory).glob("**/*")):
-  if path.is_file() and path.suffix.lower() in {".md",".txt"}:
-   for i,part in enumerate(chunk_text(path.read_text(encoding="utf-8"))):
-    docs.append({"id":f"{path.name}-{i}","text":part,"source":str(path),"chunk":i})
+  if not path.is_file(): continue
+  suffix=path.suffix.lower()
+  if suffix in {".md",".txt"}: text=path.read_text(encoding="utf-8")
+  elif suffix==".pdf":
+   from pypdf import PdfReader
+   text="\n".join(page.extract_text() or "" for page in PdfReader(str(path)).pages)
+  else: continue
+  for i,part in enumerate(chunk_text(text)):
+   docs.append({"id":f"{path.name}-{i}","text":part,"source":str(path),"chunk":i})
  return docs
 def build_index(directory:str="data/docs",reset:bool=False)->int:
  import chromadb
  from sentence_transformers import SentenceTransformer
  docs=load_documents(directory)
- if not docs: raise ValueError(f"No .md or .txt documents found in {directory}")
+ if not docs: raise ValueError(f"No supported PDF/Markdown/text documents found in {directory}")
  client=chromadb.PersistentClient(path=CHROMA_PATH)
  if reset:
   try: client.delete_collection(COLLECTION_NAME)
