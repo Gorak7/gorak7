@@ -34,6 +34,8 @@ Open `http://127.0.0.1:8000/docs`. In another terminal run `streamlit run app/da
 - `pytest -q tests`: deterministic API and chunking checks.
 - `python -m evals.evaluate`: writes a source-hit CSV from the 60-case draft dataset.
 - `pip install -r requirements-eval.txt`: installs optional Ragas/DeepEval/LangSmith packages.
+- `python -m evals.run_ragas --limit 10`: Gemini-judged faithfulness, context precision/recall and answer relevancy; use `--limit 0` for all cases.
+- `python -m evals.run_deepeval --limit 10`: Gemini-judged DeepEval answer relevancy, faithfulness and custom GEval; review actual scores and judge reasons.
 - `npx promptfoo eval -c evals/promptfooconfig.yaml`: prompt-level assertions (requires promptfoo and Gemini credentials).
 
 ## Important limitations
