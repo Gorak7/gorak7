@@ -9,3 +9,18 @@ jobs:
         with: {python-version: "3.11"}
       - run: pip install fastapi uvicorn pydantic python-dotenv pytest httpx
       - run: pytest -q tests
+  optional-llm-quality-gate:
+    if: ${{ vars.RUN_LLM_EVAL == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: pip install -r requirements-eval.txt
+      - run: python -m evals.run_ragas --limit 10
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      - run: python -m evals.quality_gate
+        env:
+          MIN_FAITHFULNESS: "0.70"
+          MIN_ANSWER_RELEVANCY: "0.60"
