@@ -1,0 +1,8 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+chroma_db/
+reports/*
+!reports/.gitkeep
+*.pyc
