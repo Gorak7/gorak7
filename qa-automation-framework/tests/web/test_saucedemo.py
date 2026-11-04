@@ -33,4 +33,5 @@ def test_cart_checkout(page):
     page.locator("[data-test=lastName]").fill("Tester")
     page.locator("[data-test=postalCode]").fill("500001")
     page.locator("[data-test=continue]").click()
-    assert page.locator(".summary_info").is_visible()
+    page.locator("[data-test=finish]").wait_for(state="visible")
+    assert page.locator("[data-test=finish]").is_visible()
