@@ -8,7 +8,12 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.11'}
       - run: pip install fastapi uvicorn pydantic pytest httpx
-      - run: pytest -m api -q
+      - run: pytest -m api --alluredir=allure-results -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api-allure-results
+          path: allure-results
   web:
     runs-on: ubuntu-latest
     steps:
@@ -17,4 +22,9 @@ jobs:
         with: {python-version: '3.11'}
       - run: pip install -r requirements.txt
       - run: playwright install --with-deps chromium
-      - run: pytest -m web -q
+      - run: pytest -m web --alluredir=allure-results -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: web-allure-results
+          path: allure-results
