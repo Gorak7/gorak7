@@ -1,0 +1,20 @@
+description: RAG answer prompt regression checks
+prompts:
+  - file://prompts/answer_v1.txt
+providers:
+  - id: google:gemini-2.0-flash
+    config:
+      apiKey: ${GEMINI_API_KEY}
+tests:
+  - vars:
+      question: What must I do before cleaning the fan?
+      context: Disconnect electrical power at the breaker before cleaning.
+    assert:
+      - type: contains
+        value: power
+  - vars:
+      question: What is the warranty period?
+      context: The documents do not specify a warranty period.
+    assert:
+      - type: llm-rubric
+        value: The response must not invent a warranty period and must state that the source does not provide it.
