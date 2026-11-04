@@ -13,9 +13,10 @@ def test_invalid_credentials(username,password,page):
     assert page.locator("[data-test='error']").is_visible()
 @pytest.mark.parametrize("index",range(6))
 def test_each_product_can_be_added_and_removed(signed_in,index):
-    signed_in.locator("[data-test^='add-to-cart']").nth(index).click()
+    item=signed_in.locator(".inventory_item").nth(index)
+    item.locator("button").click()
     assert signed_in.locator(".shopping_cart_badge").inner_text()=="1"
-    signed_in.locator("[data-test^='remove']").nth(index).click()
+    item.locator("button").click()
     assert signed_in.locator(".shopping_cart_badge").count()==0
 @pytest.mark.parametrize("index",range(6))
 def test_each_product_opens_detail_page(signed_in,index):
