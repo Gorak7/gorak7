@@ -35,3 +35,10 @@ def ask(question:str,top_k:int=4)->dict:
 def answer(question:str)->dict:
  result=ask(question)
  return {"answer":result["answer"],"sources":[{"source":c["source"],"text":c["text"]} for c in result["contexts"]]}
+
+# Optional LangSmith tracing: enabled when LANGCHAIN_TRACING_V2 and API key are configured.
+try:
+    from langsmith import traceable
+    ask = traceable(name="rag_ask")(ask)
+except ImportError:
+    pass
