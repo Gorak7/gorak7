@@ -11,7 +11,8 @@ def test_inventory_sort_options(logged_in,sort_value):
     assert logged_in.locator(".inventory_item").count()==6
 def test_product_detail_navigation(logged_in):
     logged_in.locator(".inventory_item_name").first.click()
-    assert logged_in.locator(".inventory_details").is_visible()
+    logged_in.locator(".inventory_details_container").wait_for(state="visible")
+    assert logged_in.locator(".inventory_details_container").is_visible()
 def test_add_then_remove_product(logged_in):
     logged_in.locator("[data-test^='add-to-cart']").first.click()
     logged_in.locator("[data-test^='remove']").first.click()
@@ -41,4 +42,5 @@ def test_complete_checkout(logged_in):
 def test_logout(logged_in):
     logged_in.locator("#react-burger-menu-btn").click()
     logged_in.locator("#logout_sidebar_link").click()
-    assert logged_in.locator("[data-test='login-button']").is_visible()
+    logged_in.locator("#login-button").wait_for(state="visible")
+    assert logged_in.locator("#login-button").is_visible()
