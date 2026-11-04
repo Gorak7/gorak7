@@ -1,21 +1,21 @@
 # AI Quality Engineer Portfolio
 
-Three project tracks aligned to the AI Quality Engineer roadmap in this portfolio.
+Portfolio projects based on the AI Quality Engineer roadmap.
 
 ## 1. RAG Chatbot + LLM Evaluation Pipeline
-[Open project](./rag-eval-pipeline/README.md) · [Source](./rag-eval-pipeline/src/)
-- FastAPI local RAG baseline, source attribution, golden dataset and adversarial examples.
-- Next: real document ingestion, embeddings/ChromaDB, Ragas/DeepEval, promptfoo, LangSmith and CI metric thresholds.
+[Project folder](./rag-eval-pipeline/)
+- PDF/Markdown/text ingestion, ChromaDB + sentence-transformer retrieval, FastAPI, optional Gemini, Streamlit, 60 draft golden cases, source-hit report and optional promptfoo/Ragas/DeepEval/LangSmith dependencies.
+- Remaining: human review of benchmark, actual Ragas/DeepEval scored runs and measured CI quality thresholds.
 
 ## 2. Web + Mobile + API Test Automation Framework
-[Open project](./qa-automation-framework/README.md) · [Mock API](./qa-automation-framework/mock_backend/app.py)
-- FastAPI smart-device API and pytest API tests are the initial executable baseline.
-- Next: Playwright Page Object Model, Selenium smoke suite, Appium Android Screen Objects, Allure evidence and Dockerized runs.
+[Project folder](./qa-automation-framework/)
+- FastAPI smart-fan mock service, pytest API tests, Playwright Page Object Model tests, Selenium smoke test, Appium Android sample tests, Postman collection, Allure dependency and GitHub Actions.
+- Browser/mobile tests require local setup; complete the 80+ roadmap target and collect real screenshots/reports before claiming completion.
 
 ## 3. AI-Assisted API Test Generator
-[Open project](./llm-test-generator/README.md) · [CLI](./llm-test-generator/src/cli.py)
-- OpenAPI parser, Pydantic test-case contract, deterministic baseline generator and coverage/duplicate metrics.
-- Next: LLM provider adapter, prompt v1/v2 evaluation, allowlisted test execution, mutation testing and Streamlit dashboard.
+[Project folder](./llm-test-generator/)
+- OpenAPI parser, Pydantic test-case schema, deterministic + optional Gemini generator, prompt versions, localhost-only runner, metrics, Streamlit dashboard and mutation lab.
+- Remaining: full schema/body generation, API-runner orchestration, full mutant execution and DeepEval GEval.
 
-## Reproducibility and honest reporting
-These repositories are staged implementations, not claims that every roadmap milestone is complete. Report only tests and metrics reproduced from actual runs. Keep secrets in environment variables, use authorized test targets, and include sanitized screenshots and CI run links as evidence.
+## Reproducibility
+Only claim tests, metrics and tool integrations that have actually been run and whose artifacts are committed. Keep API keys in environment variables and use authorized test targets.
