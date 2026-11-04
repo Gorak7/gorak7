@@ -108,7 +108,7 @@ jobs:
       - name: Validate reviewed 60-case dataset
         run: python -m evals.review_dataset
       - name: Run RAG API tests
-        run: python -m python -m pytest -q tests
+        run: python -m pytest -q tests
       - name: Run retrieval source-hit evaluation
         run: python -m evals.evaluate
       - name: Upload RAG evaluation reports
