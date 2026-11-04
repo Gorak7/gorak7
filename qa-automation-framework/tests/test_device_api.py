@@ -2,6 +2,8 @@ import pytest
 from fastapi.testclient import TestClient
 from mock_backend.app import app, devices
 
+pytestmark = pytest.mark.api
+
 client = TestClient(app)
 AUTH = {"Authorization": "Bearer demo-token"}
 
