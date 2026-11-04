@@ -19,4 +19,5 @@ def test_reject_short_question():
 def test_unanswerable_question_is_acknowledged():
     response = client.post("/ask", json={"question": "What is the warranty duration?"})
     assert response.status_code == 200
-    assert response.json()["sources"] == []
+    assert response.json()["sources"]
+    assert "do not specify" in response.json()["answer"].lower()
