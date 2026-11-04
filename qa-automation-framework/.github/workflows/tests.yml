@@ -1,12 +1,20 @@
-name: QA framework checks
-on: [push, pull_request]
+name: QA automation
+on: [push,pull_request]
 jobs:
-  api-tests:
+  api:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - run: pip install -r requirements.txt
+        with: {python-version: '3.11'}
+      - run: pip install fastapi uvicorn pydantic pytest httpx
       - run: pytest -m api -q
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install -r requirements.txt
+      - run: playwright install --with-deps chromium
+      - run: pytest -m web -q
