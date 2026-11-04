@@ -17,6 +17,10 @@ on:
       - ".github/workflows/ai-quality-engineer.yml"
   workflow_dispatch:
 
+concurrency:
+  group: ai-quality-engineer-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
