@@ -1,5 +1,602 @@
 [
-  {"id":"G001","question":"What should I do before cleaning the fan?","reference_answer":"Disconnect power before cleaning.","expected_sources":["docs/fan_manual.md"],"category":"factual"},
-  {"id":"G002","question":"What should I check if the fan does not start?","reference_answer":"Check the power supply and remote batteries.","expected_sources":["docs/faq.md"],"category":"factual"},
-  {"id":"G003","question":"What is the warranty period?","reference_answer":"The supplied documents do not specify a warranty period.","expected_sources":[],"category":"unanswerable"}
+  {
+    "id": "Q001",
+    "question": "What must be done before cleaning the fan?",
+    "expected_answer": "Disconnect electrical power at the breaker before cleaning or servicing the fan.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "factual",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q002",
+    "question": "Please explain: what must be done before cleaning the fan?",
+    "expected_answer": "Disconnect electrical power at the breaker before cleaning or servicing the fan.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "factual",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q003",
+    "question": "According to the provided product documents, what must be done before cleaning the fan?",
+    "expected_answer": "Disconnect electrical power at the breaker before cleaning or servicing the fan.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "factual",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q004",
+    "question": "I need help with this issue: What must be done before cleaning the fan?",
+    "expected_answer": "Disconnect electrical power at the breaker before cleaning or servicing the fan.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "factual",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q005",
+    "question": "What do the supplied manuals say about this: what must be done before cleaning the fan?",
+    "expected_answer": "Disconnect electrical power at the breaker before cleaning or servicing the fan.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "factual",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q006",
+    "question": "May liquid be sprayed into the motor housing?",
+    "expected_answer": "No. Never spray liquid directly into the motor housing.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q007",
+    "question": "Please explain: may liquid be sprayed into the motor housing?",
+    "expected_answer": "No. Never spray liquid directly into the motor housing.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q008",
+    "question": "According to the provided product documents, may liquid be sprayed into the motor housing?",
+    "expected_answer": "No. Never spray liquid directly into the motor housing.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q009",
+    "question": "I need help with this issue: May liquid be sprayed into the motor housing?",
+    "expected_answer": "No. Never spray liquid directly into the motor housing.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q010",
+    "question": "What do the supplied manuals say about this: may liquid be sprayed into the motor housing?",
+    "expected_answer": "No. Never spray liquid directly into the motor housing.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q011",
+    "question": "What should be checked if the fan wobbles?",
+    "expected_answer": "Turn it off and inspect that blades are securely attached and balanced. Do not bend blades.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q012",
+    "question": "Please explain: what should be checked if the fan wobbles?",
+    "expected_answer": "Turn it off and inspect that blades are securely attached and balanced. Do not bend blades.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q013",
+    "question": "According to the provided product documents, what should be checked if the fan wobbles?",
+    "expected_answer": "Turn it off and inspect that blades are securely attached and balanced. Do not bend blades.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q014",
+    "question": "I need help with this issue: What should be checked if the fan wobbles?",
+    "expected_answer": "Turn it off and inspect that blades are securely attached and balanced. Do not bend blades.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q015",
+    "question": "What do the supplied manuals say about this: what should be checked if the fan wobbles?",
+    "expected_answer": "Turn it off and inspect that blades are securely attached and balanced. Do not bend blades.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q016",
+    "question": "What should I do if the wiring is damaged?",
+    "expected_answer": "Stop using the fan and contact a qualified electrician.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q017",
+    "question": "Please explain: what should i do if the wiring is damaged?",
+    "expected_answer": "Stop using the fan and contact a qualified electrician.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q018",
+    "question": "According to the provided product documents, what should i do if the wiring is damaged?",
+    "expected_answer": "Stop using the fan and contact a qualified electrician.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q019",
+    "question": "I need help with this issue: What should I do if the wiring is damaged?",
+    "expected_answer": "Stop using the fan and contact a qualified electrician.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q020",
+    "question": "What do the supplied manuals say about this: what should i do if the wiring is damaged?",
+    "expected_answer": "Stop using the fan and contact a qualified electrician.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q021",
+    "question": "What should be checked when the fan will not start?",
+    "expected_answer": "Check the circuit breaker and wall switch first.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q022",
+    "question": "Please explain: what should be checked when the fan will not start?",
+    "expected_answer": "Check the circuit breaker and wall switch first.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q023",
+    "question": "According to the provided product documents, what should be checked when the fan will not start?",
+    "expected_answer": "Check the circuit breaker and wall switch first.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q024",
+    "question": "I need help with this issue: What should be checked when the fan will not start?",
+    "expected_answer": "Check the circuit breaker and wall switch first.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q025",
+    "question": "What do the supplied manuals say about this: what should be checked when the fan will not start?",
+    "expected_answer": "Check the circuit breaker and wall switch first.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q026",
+    "question": "What can I check if a remote-controlled fan does not start?",
+    "expected_answer": "Replace the remote batteries and check receiver pairing instructions in the product manual.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q027",
+    "question": "Please explain: what can i check if a remote-controlled fan does not start?",
+    "expected_answer": "Replace the remote batteries and check receiver pairing instructions in the product manual.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q028",
+    "question": "According to the provided product documents, what can i check if a remote-controlled fan does not start?",
+    "expected_answer": "Replace the remote batteries and check receiver pairing instructions in the product manual.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q029",
+    "question": "I need help with this issue: What can I check if a remote-controlled fan does not start?",
+    "expected_answer": "Replace the remote batteries and check receiver pairing instructions in the product manual.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q030",
+    "question": "What do the supplied manuals say about this: what can i check if a remote-controlled fan does not start?",
+    "expected_answer": "Replace the remote batteries and check receiver pairing instructions in the product manual.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q031",
+    "question": "What can cause a fan to run slowly according to the FAQ?",
+    "expected_answer": "Confirm the selected speed and check whether the blades are obstructed.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q032",
+    "question": "Please explain: what can cause a fan to run slowly according to the faq?",
+    "expected_answer": "Confirm the selected speed and check whether the blades are obstructed.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q033",
+    "question": "According to the provided product documents, what can cause a fan to run slowly according to the faq?",
+    "expected_answer": "Confirm the selected speed and check whether the blades are obstructed.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q034",
+    "question": "I need help with this issue: What can cause a fan to run slowly according to the FAQ?",
+    "expected_answer": "Confirm the selected speed and check whether the blades are obstructed.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q035",
+    "question": "What do the supplied manuals say about this: what can cause a fan to run slowly according to the faq?",
+    "expected_answer": "Confirm the selected speed and check whether the blades are obstructed.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "troubleshooting",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q036",
+    "question": "What should be done if the fan makes grinding or electrical noises?",
+    "expected_answer": "Switch it off and request qualified service.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q037",
+    "question": "Please explain: what should be done if the fan makes grinding or electrical noises?",
+    "expected_answer": "Switch it off and request qualified service.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q038",
+    "question": "According to the provided product documents, what should be done if the fan makes grinding or electrical noises?",
+    "expected_answer": "Switch it off and request qualified service.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q039",
+    "question": "I need help with this issue: What should be done if the fan makes grinding or electrical noises?",
+    "expected_answer": "Switch it off and request qualified service.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q040",
+    "question": "What do the supplied manuals say about this: what should be done if the fan makes grinding or electrical noises?",
+    "expected_answer": "Switch it off and request qualified service.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q041",
+    "question": "Does the supplied documentation give a warranty period?",
+    "expected_answer": "The supplied documents do not specify a warranty period.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "unanswerable",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q042",
+    "question": "Please explain: does the supplied documentation give a warranty period?",
+    "expected_answer": "The supplied documents do not specify a warranty period.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "unanswerable",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q043",
+    "question": "According to the provided product documents, does the supplied documentation give a warranty period?",
+    "expected_answer": "The supplied documents do not specify a warranty period.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "unanswerable",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q044",
+    "question": "I need help with this issue: Does the supplied documentation give a warranty period?",
+    "expected_answer": "The supplied documents do not specify a warranty period.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "unanswerable",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q045",
+    "question": "What do the supplied manuals say about this: does the supplied documentation give a warranty period?",
+    "expected_answer": "The supplied documents do not specify a warranty period.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "unanswerable",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q046",
+    "question": "What is the exact electrical rating of this fan?",
+    "expected_answer": "The supplied documents do not specify an electrical rating.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "unanswerable",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q047",
+    "question": "Please explain: what is the exact electrical rating of this fan?",
+    "expected_answer": "The supplied documents do not specify an electrical rating.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "unanswerable",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q048",
+    "question": "According to the provided product documents, what is the exact electrical rating of this fan?",
+    "expected_answer": "The supplied documents do not specify an electrical rating.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "unanswerable",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q049",
+    "question": "I need help with this issue: What is the exact electrical rating of this fan?",
+    "expected_answer": "The supplied documents do not specify an electrical rating.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "unanswerable",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q050",
+    "question": "What do the supplied manuals say about this: what is the exact electrical rating of this fan?",
+    "expected_answer": "The supplied documents do not specify an electrical rating.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "unanswerable",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q051",
+    "question": "What torque should be used for the mounting bolts?",
+    "expected_answer": "The supplied documents do not specify installation torque.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "unanswerable",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q052",
+    "question": "Please explain: what torque should be used for the mounting bolts?",
+    "expected_answer": "The supplied documents do not specify installation torque.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "unanswerable",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q053",
+    "question": "According to the provided product documents, what torque should be used for the mounting bolts?",
+    "expected_answer": "The supplied documents do not specify installation torque.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "unanswerable",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q054",
+    "question": "I need help with this issue: What torque should be used for the mounting bolts?",
+    "expected_answer": "The supplied documents do not specify installation torque.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "unanswerable",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q055",
+    "question": "What do the supplied manuals say about this: what torque should be used for the mounting bolts?",
+    "expected_answer": "The supplied documents do not specify installation torque.",
+    "expected_sources": [
+      "data/docs/fan_troubleshooting.md"
+    ],
+    "category": "unanswerable",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q056",
+    "question": "What should I do if I notice a burning smell?",
+    "expected_answer": "Switch the fan off and contact a qualified electrician.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q057",
+    "question": "Please explain: what should i do if i notice a burning smell?",
+    "expected_answer": "Switch the fan off and contact a qualified electrician.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q058",
+    "question": "According to the provided product documents, what should i do if i notice a burning smell?",
+    "expected_answer": "Switch the fan off and contact a qualified electrician.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q059",
+    "question": "I need help with this issue: What should I do if I notice a burning smell?",
+    "expected_answer": "Switch the fan off and contact a qualified electrician.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  },
+  {
+    "id": "Q060",
+    "question": "What do the supplied manuals say about this: what should i do if i notice a burning smell?",
+    "expected_answer": "Switch the fan off and contact a qualified electrician.",
+    "expected_sources": [
+      "data/docs/fan_safety.md"
+    ],
+    "category": "safety",
+    "review_status": "draft"
+  }
 ]
