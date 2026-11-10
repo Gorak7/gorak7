@@ -348,109 +348,6 @@
       ]
     },
     {
-      "name": "Create programme",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Accept",
-            "value": "application/json"
-          },
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          },
-          {
-            "key": "Authorization",
-            "value": "Bearer {{token}}"
-          }
-        ],
-        "url": "{{baseUrl}}/api/v1/programmes",
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"Startup Launchpad\",\n  \"status\": \"planned\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        }
-      },
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test('Expected response and contract', function () {",
-              "pm.response.to.have.status(201); pm.environment.set('programmeId',pm.response.json().data.id);",
-              "});"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "Delete mentor",
-      "request": {
-        "method": "DELETE",
-        "header": [
-          {
-            "key": "Accept",
-            "value": "application/json"
-          },
-          {
-            "key": "Authorization",
-            "value": "Bearer {{token}}"
-          }
-        ],
-        "url": "{{baseUrl}}/api/v1/mentors/{{mentorId}}"
-      },
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test('Expected response and contract', function () {",
-              "pm.response.to.have.status(200);",
-              "});"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "Verify deleted mentor",
-      "request": {
-        "method": "GET",
-        "header": [
-          {
-            "key": "Accept",
-            "value": "application/json"
-          },
-          {
-            "key": "Authorization",
-            "value": "Bearer {{token}}"
-          }
-        ],
-        "url": "{{baseUrl}}/api/v1/mentors/{{mentorId}}"
-      },
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "type": "text/javascript",
-            "exec": [
-              "pm.test('Expected response and contract', function () {",
-              "pm.response.to.have.status(404);",
-              "});"
-            ]
-          }
-        }
-      ]
-    },
-    {
       "name": "Read mentor",
       "request": {
         "method": "GET",
@@ -547,6 +444,36 @@
             "exec": [
               "pm.test('Expected response and contract', function () {",
               "pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Verify deleted mentor",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/mentors/{{mentorId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected response and contract', function () {",
+              "pm.response.to.have.status(404);",
               "});"
             ]
           }
