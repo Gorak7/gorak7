@@ -348,6 +348,37 @@
       ]
     },
     {
+      "name": "List mentors",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/mentors"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('List returns 200', function () {",
+              "pm.response.to.have.status(200);",
+              "pm.expect(pm.response.json().data).to.be.an('array');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
       "name": "Read mentor",
       "request": {
         "method": "GET",
@@ -517,6 +548,37 @@
             "exec": [
               "pm.test('Expected response and contract', function () {",
               "pm.response.to.have.status(201); pm.environment.set('programmeId',pm.response.json().data.id);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List programmes",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{baseUrl}}/api/v1/programmes"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('List returns 200', function () {",
+              "pm.response.to.have.status(200);",
+              "pm.expect(pm.response.json().data).to.be.an('array');",
               "});"
             ]
           }
