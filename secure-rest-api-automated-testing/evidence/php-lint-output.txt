@@ -1,0 +1,1 @@
+PHP syntax lint was run for all PHP files under src/, public/, tests/ and database/. See LOCAL-VALIDATION.md for scope and limitations.

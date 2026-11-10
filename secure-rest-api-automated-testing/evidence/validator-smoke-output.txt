@@ -1,0 +1,4 @@
+PASS - valid startup
+PASS - reject bad email
+PASS - reject unsafe URL
+PASS - allow partial update

@@ -1,0 +1,27 @@
+name: Secure REST API CI
+on:
+  push:
+    paths:
+      - 'secure-rest-api-automated-testing/**'
+      - '.github/workflows/secure-rest-api-ci.yml'
+  pull_request:
+    paths:
+      - 'secure-rest-api-automated-testing/**'
+      - '.github/workflows/secure-rest-api-ci.yml'
+  workflow_dispatch:
+jobs:
+  php-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: secure-rest-api-automated-testing
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_mysql
+          coverage: none
+      - run: composer install --no-interaction --prefer-dist
+      - run: composer lint
+      - run: composer test
