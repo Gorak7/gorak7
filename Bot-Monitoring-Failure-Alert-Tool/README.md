@@ -1,39 +1,44 @@
 # Bot Monitoring & Failure Alert Tool
 
-Python monitoring utility for the invoice bot. Reads execution-log CSV files, classifies failures, stores runs/incidents in SQLite (or configured SQLAlchemy database), exports daily reports, and optionally sends SMTP alerts.
+Python utility for importing exported RPA execution logs, validating the log contract, classifying incidents, persisting records, producing reports, and optionally sending SMTP alerts.
 
-> Bundled logs and reports are synthetic demonstration data. SMTP is disabled unless configured. This tool does not connect to A360 Control Room directly; export A360 execution logs to the documented CSV format first.
+> Bundled logs and reports are synthetic demonstration data. The tool does not currently connect directly to Automation Anywhere Control Room. Export logs from an authorized A360 tenant to CSV first.
 
 ## Quick start
 ```bash
 python -m venv .venv
-# Windows: .venv\Scripts\activate
+# Windows: .venv\\Scripts\\activate
 # macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
 python src/monitor.py --input data/execution_logs_demo.csv --out reports
 ```
-Default database: `sqlite:///bot_monitor.db`. Set `DATABASE_URL` for MySQL, and configure SMTP variables only if you want real email alerts. Use `--send-email` to opt in.
+Default database is SQLite (bot_monitor.db). Configure DATABASE_URL to use a provisioned SQLAlchemy-compatible database.
+
+## Optional email alerts
+Copy .env.example to .env, set SMTP host/port, username/password and sender/recipient, then run:
+```bash
+python src/monitor.py --input data/execution_logs_demo.csv --out reports --send-email
+```
+Email is disabled by default. Never commit .env or production credentials. SMTP failures are reported and cause a non-zero process exit.
 
 ## Dashboard
 ```bash
 streamlit run dashboard/app.py
 ```
-The Streamlit dashboard loads the bundled sample CSVs; upload your own log CSV to inspect actual exported runs.
+The dashboard uses synthetic bundled logs by default. Upload a sanitized A360-exported CSV to inspect actual logs.
 
-## Expected log columns
+## Required CSV columns
 `run_id,bot_name,invoice_id,status,started_at,completed_at,duration_seconds,error_message`.
-Accepted status values: SUCCESS, FAILED, COMPLETED, ERROR, TIMEOUT.
+Statuses: SUCCESS, FAILED, COMPLETED, ERROR, TIMEOUT. Timestamps must be parseable and duration must be non-negative.
 
-## Failure categories
+## Incident categories
 DATA_ERROR, APPLICATION_ERROR, TIMEOUT, DATABASE_ERROR, FILE_SYSTEM_ERROR, AUTHENTICATION_ERROR, UNKNOWN_ERROR.
 
 ## Tests
-```bash
-pytest -q
-```
+From this project directory: `python -m pytest -q tests`. From repository root: `python -m pytest -q Bot-Monitoring-Failure-Alert-Tool/tests`.
 
-## Lovable dashboard workspace
-A Lovable project shell was created for the visual operations console: [FlowOps Operations Console](https://lovable.dev/projects/18544cd7-df22-4cc5-af5d-297389a8f1b2). Its AI build turn is pending because the Lovable workspace currently reports no remaining credits. The Streamlit dashboard in this repository is runnable now; the Lovable UI can be completed after credits are available.
+## Integration limitations
+See [INTEGRATION.md](docs/INTEGRATION.md). SQLite persistence is idempotent by (run_id, invoice_id). Non-SQLite databases currently use append-only persistence and require provisioned tables plus dialect-specific unique constraints before production use.
 
 ## Security
-Never commit real invoices, credentials, SMTP passwords, or production logs. Use environment variables and sanitized logs. Monitor only systems you are authorized to monitor.
+Use sanitized logs, protect invoice data, store secrets in a vault, and monitor only systems you are authorized to access.
