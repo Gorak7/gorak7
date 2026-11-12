@@ -1,45 +1,34 @@
 # Invoice Processing Bot — Automation Anywhere A360
 
-A portfolio implementation blueprint for an A360 Community Edition invoice workflow, with reproducible sample data, validation rules, SQL schema, and a local Python reference processor.
+Portfolio blueprint for building an invoice-processing workflow in Automation Anywhere A360, with a runnable Python reference processor, synthetic test data, validation rules and a database schema.
 
-> **Evidence integrity:** bundled records are synthetic. The Python reference processor is runnable; the A360 bot must be built/imported and run in your own A360 Community Edition workspace. Do not describe the A360 workflow as executed until you capture your own run evidence.
+> Bundled input/output records are synthetic. The Python reference processor is runnable locally. The A360 task itself still needs to be built and run in your authorized A360 Community workspace before claiming A360 execution evidence.
 
-## What it demonstrates
-- Folder-based invoice intake (CSV/XLSX; PDF extraction via A360 document/OCR actions)
-- Required-field, amount, GST-format, and duplicate-invoice validation
-- Accepted/rejected routing and exception reasons
-- SQL persistence and structured execution logs
-- Daily summary output for email delivery
+## Capabilities
+- CSV/XLSX invoice intake in the Python reference processor; PDF/OCR extraction belongs in the A360 workflow.
+- Required-field, GST-format, positive amount, non-negative tax, date-order and currency validation.
+- Duplicate invoice detection within a batch.
+- Accepted/rejected CSV reports, structured execution logs and daily summary.
+- SQLite persistence by default; MySQL schema is supplied.
 
-## Quick start (reference processor)
+## Quick start
 ```bash
 python -m venv .venv
-# Windows: .venv\Scripts\activate
+# Windows: .venv\\Scripts\\activate
 # macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
 python src/process_invoices.py --input data/invoices_demo.csv --out output
 ```
-The reference processor writes `processed_invoices.csv`, `invoice_exceptions.csv`, `execution_logs.csv`, and a summary. SQLite is used by default; set `DATABASE_URL` for a SQLAlchemy-supported database.
+Set DATABASE_URL to select a database. SQLite writes are idempotent by invoice ID. The MySQL schema uses a unique invoice ID and the reference processor uses INSERT IGNORE for accepted rows.
 
-## A360 implementation
-Follow [A360_BUILD_GUIDE.md](docs/A360_BUILD_GUIDE.md). Use a dedicated input/archive/error folder and configure credentials through A360 Credential Vault, never hard-code passwords.
+## Required input columns
+`invoice_id,vendor_name,invoice_date,due_date,gst_number,amount,tax_amount,currency,source_file`.
+GST validation checks format only; it does not verify registration against government services.
 
-## Data contract
-Required columns: `invoice_id,vendor_name,invoice_date,due_date,gst_number,amount,tax_amount,currency,source_file`.
-Rules: non-empty invoice/vendor/date/GST; positive amount; amount numeric; GST format check; duplicate invoice ID rejected within the batch. GST validation is a demo format check, not a government verification.
+## A360 workflow
+Follow [A360_BUILD_GUIDE.md](docs/A360_BUILD_GUIDE.md). Use A360 Credential Vault for secrets, parameterized database actions, exception branches, and explicit handling for OCR, email and file-system failures.
 
-## Evidence to capture after your own A360 run
-1. Bot task editor showing the workflow and exception branches.
-2. Input folder before/after processing.
-3. A360 run details and execution log.
-4. Accepted output and exception report.
-5. SQL query results and daily email received (if configured).
-
-## Repository layout
-- `src/process_invoices.py`: runnable reference processor.
-- `data/invoices_demo.csv`: synthetic test invoices.
-- `database/schema.sql`: MySQL schema.
-- `docs/A360_BUILD_GUIDE.md`: A360 build steps and control flow.
-- `evidence/README.md`: evidence capture checklist.
+## Evidence checklist
+Capture genuine screenshots from your own A360 run: bot task, input folder, execution details, accepted/rejected outputs, database results and actual email inbox if configured. Do not present synthetic CSVs or Python output as A360 execution evidence.
 
 MIT License.
