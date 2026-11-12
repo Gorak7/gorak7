@@ -1,0 +1,2 @@
+total_runs,successful_runs,failed_runs,failure_rate_pct,success_rate_pct,demo_note
+10,6,4,40.0,60.0,SYNTHETIC_DEMO_NOT_LIVE_MONITORING
