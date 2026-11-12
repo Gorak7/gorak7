@@ -1,0 +1,2 @@
+run_id,total,accepted,rejected,success_rate_pct,demo_note
+DEMO-RUN-001,10,7,3,70.0,SYNTHETIC_DEMO_NOT_A_REAL_A360_RUN

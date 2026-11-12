@@ -1,0 +1,5 @@
+run_id,bot_name,invoice_id,status,duration_seconds,error_message,error_category,incident_status,demo_note
+RUN003,Invoice Processing Bot,INV1003,FAILED,8,Invalid invoice number,DATA_ERROR,OPEN,SYNTHETIC_DEMO
+RUN004,Invoice Processing Bot,INV1004,FAILED,30,Application not responding,APPLICATION_ERROR,OPEN,SYNTHETIC_DEMO
+RUN006,Invoice Processing Bot,INV1006,FAILED,70,Database connection refused,DATABASE_ERROR,OPEN,SYNTHETIC_DEMO
+RUN008,Invoice Processing Bot,INV1008,TIMEOUT,150,Execution timed out,TIMEOUT,OPEN,SYNTHETIC_DEMO

@@ -181,6 +181,20 @@ Checks HTTP and TCP targets on a schedule, records latency and status history, i
 > These are portfolio implementations and should be run and tested in your own environment before claiming measured performance or production readiness. Monitor only systems you own or have explicit permission to test.
 
 
+
+
+## RPA Automation & Production Support Portfolio
+
+**Automation Anywhere A360 | Python | MySQL | Streamlit | SQL | CSV Reporting**
+
+Two connected projects demonstrating invoice processing, validation, exception handling, bot execution monitoring, failure classification, SQL persistence, and reporting. All bundled datasets are synthetic demonstrations; run the projects locally and capture your own A360 evidence before claiming execution results.
+
+- [Invoice Processing Bot — Automation Anywhere A360](./RPA-Invoice-Processing-Bot/README.md)
+- [Bot Monitoring & Failure Alert Tool — Python](./Bot-Monitoring-Failure-Alert-Tool/README.md)
+- [RPA Portfolio Overview](./RPA-Portfolio-Projects/README.md)
+- [FlowOps Operations Console — Lovable editor](https://lovable.dev/projects/18544cd7-df22-4cc5-af5d-297389a8f1b2) (project shell created; UI build pending workspace credits)
+
+
 ## GRC Analyst Portfolio Projects
 
 ### 1. Mini Compliance Program – ISO 27001:2022
