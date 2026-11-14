@@ -367,16 +367,7 @@ def process_records(root: Path, records: list[dict], suppliers_file: Path | None
             LOG.exception("Processing error for %s", raw_path)
         record.processed_at = now_iso()
         results.append(record)
-        target_name = {"APPROVED": "Approved", "REVIEW": "Review", "REJECTED": "Rejected"}[record.status]
-        if raw_path and source.exists():
-            destination = root / target_name / source.name
-            try:
-                if source.resolve() != destination.resolve():
-                    shutil.copy2(source, destination)
-            except OSError as exc:
-                record.status = "REVIEW"
-                record.decision_reason += f"; ROUTING_ERROR: {exc}"
-                LOG.exception("FILE_SYSTEM_ERROR while routing %s", source)
+        database_ok = True
         try:
             if record.status == "APPROVED":
                 conn.execute("""INSERT INTO invoices VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
@@ -397,13 +388,39 @@ def process_records(root: Path, records: list[dict], suppliers_file: Path | None
             record.status = "REJECTED"
             record.decision_reason = "DUPLICATE_ACROSS_RUNS"
             LOG.warning("Duplicate invoice prevented by database unique key: %s", record.invoice_id)
-        LOG.info("%s %s %s %s", record.status, record.invoice_id, record.source_file, record.decision_reason)
-        if raw_path and source.exists():
             try:
+                conn.execute("""INSERT INTO processing_events
+                    (run_id,invoice_id,source_file,status,decision_reason,extraction_method,started_at,completed_at)
+                    VALUES (?,?,?,?,?,?,?,?)""",
+                    (run_id, record.invoice_id, record.source_file, record.status,
+                     record.decision_reason, record.extraction_method, started, now_iso()))
+                conn.commit()
+            except sqlite3.Error:
+                conn.rollback()
+                LOG.exception("Could not persist duplicate event")
+        except sqlite3.Error as exc:
+            conn.rollback()
+            database_ok = False
+            record.status = "REVIEW"
+            record.decision_reason = f"DATABASE_ERROR: {exc}"
+            LOG.exception("DATABASE_ERROR for %s", record.invoice_id)
+
+        if raw_path and source.exists():
+            target_name = ({"APPROVED": "Approved", "REVIEW": "Review", "REJECTED": "Rejected"}[record.status]
+                           if database_ok else "Exceptions")
+            destination = root / target_name / source.name
+            try:
+                if source.resolve() != destination.resolve():
+                    shutil.move(str(source), str(destination))
                 working_file = root / "Working" / source.name
-                if working_file.exists(): working_file.unlink()
-            except OSError:
-                LOG.exception("FILE_SYSTEM_ERROR cleaning Working file %s", raw_path)
+                if working_file.exists():
+                    working_file.unlink()
+            except OSError as exc:
+                record.status = "REVIEW"
+                record.decision_reason += f"; FILE_SYSTEM_ERROR: {exc}"
+                LOG.exception("FILE_SYSTEM_ERROR while routing %s", source)
+        LOG.info("%s %s %s %s", record.status, record.invoice_id, record.source_file, record.decision_reason)
+
     conn.close()
     report = write_reports(root, run_id, results)
     attachments = [Path(report["csv"]), Path(report["xlsx"])]
