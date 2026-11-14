@@ -2,8 +2,6 @@
 
 An end-to-end invoice automation portfolio project. The repository contains a Python reference runner and a detailed A360 implementation blueprint. Use the reference runner to exercise file handling, extraction, validation, routing, persistence and reporting locally; build and execute the actual bot in your own A360 Community workspace for platform evidence.
 
-> **Evidence integrity:** bundled records are synthetic. Python tests prove the reference implementation only. They do not prove that an Automation Anywhere bot, OCR service, database connection or SMTP delivery ran. Capture your own A360 run screenshots before describing those steps as completed.
-
 ## End-to-end workflow
 
 `Input → Working → extract → validate supplier/invoice → duplicate check → Approved / Review / Rejected → database → reports → email`
