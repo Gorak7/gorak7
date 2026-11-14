@@ -74,13 +74,15 @@ def now_iso() -> str:
 def setup_logging(root: Path) -> None:
     log_dir = root / "Logs"
     log_dir.mkdir(parents=True, exist_ok=True)
-    if not LOG.handlers:
-        LOG.setLevel(logging.INFO)
-        handler = RotatingFileHandler(log_dir / "invoice_pipeline.log", maxBytes=1_000_000,
-                                      backupCount=5, encoding="utf-8")
-        handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
-        LOG.addHandler(handler)
-        LOG.addHandler(logging.StreamHandler(sys.stdout))
+    for existing in list(LOG.handlers):
+        existing.close()
+        LOG.removeHandler(existing)
+    LOG.setLevel(logging.INFO)
+    handler = RotatingFileHandler(log_dir / "invoice_pipeline.log", maxBytes=1_000_000,
+                                  backupCount=5, encoding="utf-8")
+    handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
+    LOG.addHandler(handler)
+    LOG.addHandler(logging.StreamHandler(sys.stdout))
 
 
 def sha256_file(path: Path) -> str:
@@ -322,7 +324,13 @@ def process_records(root: Path, records: list[dict], suppliers_file: Path | None
         (root / name).mkdir(parents=True, exist_ok=True)
     setup_logging(root)
     run_id = "INV-" + uuid.uuid4().hex[:10].upper()
-    conn = db_connect(database or root / "database" / "invoices.sqlite3")
+    try:
+        conn = db_connect(database or root / "database" / "invoices.sqlite3")
+    except sqlite3.Error as exc:
+        error_file = root / "Exceptions" / f"database_error_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+        error_file.write_text(f"DATABASE_ERROR: {exc}\nRun ID: {run_id}\n", encoding="utf-8")
+        LOG.exception("DATABASE_ERROR: cannot open invoice database")
+        raise RuntimeError(f"DATABASE_ERROR: {exc}") from exc
     suppliers = supplier_set(suppliers_file)
     seen: set[str] = set()
     results: list[Result] = []
