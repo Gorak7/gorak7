@@ -90,7 +90,7 @@ The example host/account above are placeholders. Use your provider's SMTP settin
 python src/invoice_pipeline.py --root . --watch --interval 10 --suppliers data/suppliers_demo.csv
 ```
 
-The reference watcher polls for new PDFs. It is a local polling process, not a cloud event trigger or A360 Control Room integration.
+The reference watcher polls for new PDFs and CSV/XLSX manifests. It is a local polling process, not a cloud event trigger or A360 Control Room integration.
 
 ## Database
 
