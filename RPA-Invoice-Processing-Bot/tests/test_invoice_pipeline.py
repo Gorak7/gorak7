@@ -10,6 +10,7 @@ invoice_pipeline = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(invoice_pipeline)
 process_records = invoice_pipeline.process_records
 read_manifest = invoice_pipeline.read_manifest
+parse_pdf = invoice_pipeline.parse_pdf
 
 
 def _row(invoice_id, source_file):
@@ -86,3 +87,28 @@ def test_missing_file_is_rejected(tmp_path):
     root = tmp_path / "workspace"
     result = process_records(root, [_row("INV-MISSING", root / "Input" / "missing.pdf")])
     assert result["summary"]["rejected"] == 1
+
+
+def test_pdf_text_field_extraction(tmp_path):
+    from reportlab.pdfgen import canvas
+
+    pdf = tmp_path / "invoice.pdf"
+    document = canvas.Canvas(str(pdf))
+    lines = [
+        "Invoice Number: INV-PDF-001",
+        "Supplier: Acme Supplies",
+        "Invoice Date: 2026-11-01",
+        "GSTIN: 29ABCDE1234F1Z5",
+        "Tax Amount: 180.00",
+        "Grand Total: 1180.00",
+    ]
+    for index, line in enumerate(lines):
+        document.drawString(50, 780 - index * 24, line)
+    document.save()
+
+    extracted, method = parse_pdf(pdf)
+    assert method == "pdf_text"
+    assert extracted["invoice_id"] == "INV-PDF-001"
+    assert extracted["vendor_name"] == "Acme Supplies"
+    assert extracted["gst_number"] == "29ABCDE1234F1Z5"
+    assert extracted["amount"] == "1180.00"
