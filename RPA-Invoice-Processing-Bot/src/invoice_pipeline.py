@@ -320,7 +320,7 @@ def process_records(root: Path, records: list[dict], suppliers_file: Path | None
                     database: Path | None = None, enable_ocr: bool = False,
                     send_notification: bool = False) -> dict:
     root = root.resolve()
-    for name in ("Input", "Working", "Approved", "Review", "Rejected", "Exceptions", "Logs", "Reports"):
+    for name in ("Input", "Working", "Approved", "Review", "Rejected", "Exceptions", "Processed", "Logs", "Reports"):
         (root / name).mkdir(parents=True, exist_ok=True)
     setup_logging(root)
     run_id = "INV-" + uuid.uuid4().hex[:10].upper()
