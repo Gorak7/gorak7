@@ -114,3 +114,15 @@ def test_pdf_text_field_extraction(tmp_path):
     assert extracted["vendor_name"] == "Acme Supplies"
     assert extracted["gst_number"] == "29ABCDE1234F1Z5"
     assert extracted["amount"] == "1180.00"
+
+
+def test_unreadable_pdf_is_sent_to_exceptions(tmp_path):
+    root = tmp_path / "workspace"
+    inbox = root / "Input"
+    inbox.mkdir(parents=True)
+    pdf = inbox / "corrupt.pdf"
+    pdf.write_text("not a real PDF", encoding="utf-8")
+
+    result = process_records(root, [{"source_file": pdf.name}])
+    assert result["summary"]["review"] == 1
+    assert (root / "Exceptions" / pdf.name).exists()
