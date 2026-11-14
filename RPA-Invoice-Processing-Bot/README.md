@@ -1,34 +1,121 @@
-# Invoice Processing Bot — Automation Anywhere A360
+# RPA Invoice Processing Bot — Automation Anywhere A360
 
-Portfolio blueprint for building an invoice-processing workflow in Automation Anywhere A360, with a runnable Python reference processor, synthetic test data, validation rules and a database schema.
+An end-to-end invoice automation portfolio project. The repository contains a Python reference runner and a detailed A360 implementation blueprint. Use the reference runner to exercise file handling, extraction, validation, routing, persistence and reporting locally; build and execute the actual bot in your own A360 Community workspace for platform evidence.
 
-> Bundled input/output records are synthetic. The Python reference processor is runnable locally. The A360 task itself still needs to be built and run in your authorized A360 Community workspace before claiming A360 execution evidence.
+> **Evidence integrity:** bundled records are synthetic. Python tests prove the reference implementation only. They do not prove that an Automation Anywhere bot, OCR service, database connection or SMTP delivery ran. Capture your own A360 run screenshots before describing those steps as completed.
 
-## Capabilities
-- CSV/XLSX invoice intake in the Python reference processor; PDF/OCR extraction belongs in the A360 workflow.
-- Required-field, GST-format, positive amount, non-negative tax, date-order and currency validation.
-- Duplicate invoice detection within a batch.
-- Accepted/rejected CSV reports, structured execution logs and daily summary.
-- SQLite persistence by default; MySQL schema is supplied.
+## End-to-end workflow
 
-## Quick start
-```bash
-python -m venv .venv
-# Windows: .venv\\Scripts\\activate
-# macOS/Linux: source .venv/bin/activate
+`Input → Working → extract → validate supplier/invoice → duplicate check → Approved / Review / Rejected → database → reports → email`
+
+The folders are created automatically under the workspace root:
+- `Input/`: incoming PDF invoices and/or a CSV/XLSX manifest
+- `Working/`: temporary working copies
+- `Approved/`, `Review/`, `Rejected/`: routed source files
+- `Exceptions/`: reserved for unreadable/corrupt source files and A360 file-level exceptions
+- `Logs/`: rotating execution log
+- `Reports/`: CSV, XLSX, PDF and JSON processing reports
+- `database/`: SQLite database
+
+## Implemented in the Python reference runner
+
+- **Input:** CSV and Excel manifests; folder discovery for PDF invoices.
+- **PDF extraction:** selectable PDF text extraction using pdfplumber; optional Tesseract OCR fallback. OCR results are routed to Review for human verification. Extraction uses configurable field patterns and is not a universal invoice parser.
+- **Supplier checks:** optional supplier master CSV with `vendor_name`, `gst_number`, and `status`. Unknown supplier and GST mismatch go to Review; inactive supplier is rejected.
+- **Validation:** mandatory invoice ID/supplier/date/amount, GST format, positive amount, non-negative tax, currency format and date ordering.
+- **Duplicate protection:** duplicate invoice IDs within a batch and across previous runs, plus source-file SHA-256 duplicate detection, backed by SQLite unique keys.
+- **Routing:** Approved / Review / Rejected folders. Missing and unreadable source files are recorded as exceptions in the processing report.
+- **Database:** parameterized SQLite writes for approved invoices and processing events.
+- **Reports:** CSV and Excel detail reports, PDF summary/detail report and JSON processing summary.
+- **Logging and errors:** rotating logs, file-level error reasons, extraction failures, database duplicate handling, filesystem handling and optional email error logs.
+- **Email:** optional SMTP notification with report attachments. Delivery is only claimed after a successful SMTP send.
+
+## Setup (Windows PowerShell)
+
+From this project directory:
+
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
 pip install -r requirements.txt
-python src/process_invoices.py --input data/invoices_demo.csv --out output
 ```
-Set DATABASE_URL to select a database. SQLite writes are idempotent by invoice ID. The MySQL schema uses a unique invoice ID and the reference processor uses INSERT IGNORE for accepted rows.
 
-## Required input columns
-`invoice_id,vendor_name,invoice_date,due_date,gst_number,amount,tax_amount,currency,source_file`.
-GST validation checks format only; it does not verify registration against government services.
+### Run a CSV/XLSX manifest
 
-## A360 workflow
-Follow [A360_BUILD_GUIDE.md](docs/A360_BUILD_GUIDE.md). Use A360 Credential Vault for secrets, parameterized database actions, exception branches, and explicit handling for OCR, email and file-system failures.
+The manifest must contain `source_file` paths. Relative paths resolve under `Input/`.
+
+```powershell
+python src/invoice_pipeline.py --root . --input data/invoice_manifest_demo.csv --suppliers data/suppliers_demo.csv
+```
+
+### Process PDFs from the Input folder
+
+Put PDFs in `Input/`, then run:
+
+```powershell
+python src/invoice_pipeline.py --root . --input Input --suppliers data/suppliers_demo.csv
+```
+
+### Optional OCR
+
+Install Tesseract OCR and Poppler separately on Windows, ensure their executables are on PATH, then install optional Python packages:
+
+```powershell
+pip install pdf2image pytesseract
+python src/invoice_pipeline.py --root . --input Input --ocr
+```
+
+Scanned PDFs without OCR configured are routed to Review with a PDF extraction reason. OCR-extracted invoices also go to Review.
+
+### Optional email
+
+Set SMTP values in the current terminal session; never commit credentials or a populated `.env` file:
+
+```powershell
+$env:SMTP_HOST="smtp.example.com"
+$env:SMTP_PORT="587"
+$env:SMTP_USER="your-account"
+$env:SMTP_PASSWORD="app-password"
+$env:SMTP_TO="recipient@example.com"
+$env:SMTP_FROM="your-account"
+python src/invoice_pipeline.py --root . --input Input --email
+```
+
+The example host/account above are placeholders. Use your provider's SMTP settings and app password. A successful local run is not proof of A360 email automation.
+
+### Folder monitoring
+
+```powershell
+python src/invoice_pipeline.py --root . --watch --interval 10 --suppliers data/suppliers_demo.csv
+```
+
+The reference watcher polls for new PDFs and CSV/XLSX manifests. It is a local polling process, not a cloud event trigger or A360 Control Room integration.
+
+## Database
+
+The local reference runner uses `database/invoices.sqlite3`. It stores approved invoice rows, file hashes and processing events. `database/schema.sql` is the MySQL schema for the A360/database deployment path. Use parameterized queries and a unique invoice ID constraint; store credentials in A360 Credential Vault or environment secrets.
+
+## Tests
+
+```powershell
+python -m pytest -q tests
+```
+
+Tests cover manifest reading, approved routing, report creation, cross-run duplicate rejection, unknown supplier review and missing-file rejection. PDF/OCR and SMTP require separate environment-level integration tests.
+
+## A360 build guide
+
+Follow [docs/A360_BUILD_GUIDE.md](docs/A360_BUILD_GUIDE.md) for the task sequence and action-level checklist. The A360 bot itself still needs to be built and run in your tenant.
 
 ## Evidence checklist
-Capture genuine screenshots from your own A360 run: bot task, input folder, execution details, accepted/rejected outputs, database results and actual email inbox if configured. Do not present synthetic CSVs or Python output as A360 execution evidence.
 
-MIT License.
+See [evidence/README.md](evidence/README.md). Capture genuine screenshots from your own A360 run and mask supplier/customer data. Do not upload credentials, real invoices or personal data.
+
+## Reference projects used for workflow design
+
+- [Automation Anywhere A360 bot examples](https://github.com/48Naveenkumar/RPA_AutomationAnywhere_Bots-using-360Tool) — Excel/database, PDF/CSV, email, file and error-handling patterns.
+- [Python invoice bot](https://github.com/efrabuilder/invoice-bot) — PDF extraction, cross-run duplicate checks, batch processing, logs and reports.
+- [UiPath invoice validation example](https://github.com/AhmedAmineKadri/uipath-invoice-validation-bot) and [UiPath PDF processing example](https://github.com/GuntimaduguGrace/UiPath-InvoiceProcessingBot) — approval/review/rejection routing patterns. These are UiPath references, not A360 implementations.
+
+Reference repositories are learning sources; this project is independently implemented and adapted to its own folder, data and code structure.
