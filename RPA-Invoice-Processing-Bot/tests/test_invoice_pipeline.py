@@ -2,7 +2,14 @@ from pathlib import Path
 
 import pandas as pd
 
-from invoice_pipeline import process_records, read_manifest
+import importlib.util
+
+MODULE_PATH = Path(__file__).parents[1] / "src" / "invoice_pipeline.py"
+SPEC = importlib.util.spec_from_file_location("invoice_pipeline", MODULE_PATH)
+invoice_pipeline = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(invoice_pipeline)
+process_records = invoice_pipeline.process_records
+read_manifest = invoice_pipeline.read_manifest
 
 
 def _row(invoice_id, source_file):
@@ -57,7 +64,8 @@ def test_duplicate_invoice_is_rejected_across_runs(tmp_path):
     process_records(root, [_row("INV-DUP", first)], suppliers)
     result = process_records(root, [_row("INV-DUP", second)], suppliers)
     assert result["summary"]["rejected"] == 1
-    assert "DUPLICATE_ACROSS_RUNS" in result["summary"].__str__() or result["summary"]["rejected"] == 1
+    details = pd.read_csv(result["csv"])
+    assert "DUPLICATE_ACROSS_RUNS" in details.iloc[0]["decision_reason"]
 
 
 def test_unknown_supplier_goes_to_review(tmp_path):
