@@ -13,6 +13,7 @@ SPEC.loader.exec_module(invoice_pipeline)
 process_records = invoice_pipeline.process_records
 read_manifest = invoice_pipeline.read_manifest
 parse_pdf = invoice_pipeline.parse_pdf
+discover_folder_records = invoice_pipeline.discover_folder_records
 
 
 def _row(invoice_id, source_file):
@@ -126,3 +127,16 @@ def test_unreadable_pdf_is_sent_to_exceptions(tmp_path):
     result = process_records(root, [{"source_file": pdf.name}])
     assert result["summary"]["review"] == 1
     assert (root / "Exceptions" / pdf.name).exists()
+
+
+def test_folder_discovery_reads_pdf_and_csv(tmp_path):
+    inbox = tmp_path / "Input"
+    inbox.mkdir()
+    (inbox / "one.pdf").write_text("synthetic PDF placeholder", encoding="utf-8")
+    pd.DataFrame([{"invoice_id": "INV-FOLDER", "vendor_name": "Acme Supplies"}]).to_csv(
+        inbox / "batch.csv", index=False
+    )
+
+    records = discover_folder_records(inbox)
+    assert any(row.get("source_file") == "one.pdf" for row in records)
+    assert any(row.get("invoice_id") == "INV-FOLDER" for row in records)
