@@ -135,14 +135,25 @@ def read_manifest(path: Path) -> list[dict]:
     return frame.to_dict(orient="records")
 
 
-def supplier_set(path: Path | None) -> set[str]:
-    if path is None or not path.exists():
-        return set()
+def supplier_set(path: Path | None) -> dict[str, dict[str, str]]:
+    if path is None:
+        return {}
+    if not path.exists():
+        raise FileNotFoundError(f"Supplier master not found: {path}")
     if pd is None:
         raise RuntimeError("pandas is required to read supplier master")
     frame = pd.read_csv(path, dtype=str, keep_default_na=False)
-    column = "vendor_name" if "vendor_name" in frame.columns else frame.columns[0]
-    return {str(value).strip().casefold() for value in frame[column] if str(value).strip()}
+    if "vendor_name" not in frame.columns:
+        raise ValueError("Supplier master must contain vendor_name")
+    suppliers = {}
+    for row in frame.to_dict(orient="records"):
+        name = str(row.get("vendor_name", "")).strip().casefold()
+        if name:
+            suppliers[name] = {
+                "gst_number": str(row.get("gst_number", "")).strip().upper(),
+                "status": str(row.get("status", "ACTIVE")).strip().upper() or "ACTIVE",
+            }
+    return suppliers
 
 
 def db_connect(path: Path) -> sqlite3.Connection:
@@ -161,7 +172,7 @@ def db_connect(path: Path) -> sqlite3.Connection:
     return connection
 
 
-def validate(record: Result, suppliers: set[str], conn: sqlite3.Connection,
+def validate(record: Result, suppliers: dict[str, dict[str, str]], conn: sqlite3.Connection,
              seen_this_run: set[str]) -> tuple[str, str]:
     issues: list[str] = []
     warnings: list[str] = []
@@ -181,8 +192,15 @@ def validate(record: Result, suppliers: set[str], conn: sqlite3.Connection,
     if record.file_sha256 and conn.execute("SELECT 1 FROM file_hashes WHERE file_sha256=?",
                                            (record.file_sha256,)).fetchone():
         issues.append("DUPLICATE_FILE_ACROSS_RUNS")
-    if vendor and suppliers and vendor.casefold() not in suppliers:
+    supplier = suppliers.get(vendor.casefold()) if vendor else None
+    if suppliers and vendor and supplier is None:
         warnings.append("UNKNOWN_SUPPLIER")
+    elif supplier:
+        if supplier.get("status") not in ("ACTIVE", "APPROVED", "ENABLED"):
+            issues.append("SUPPLIER_NOT_ACTIVE")
+        master_gst = supplier.get("gst_number", "")
+        if master_gst and record.gst_number and master_gst != record.gst_number.strip().upper():
+            warnings.append("SUPPLIER_GST_MISMATCH")
     if record.gst_number and not GST_RE.fullmatch(record.gst_number.strip().upper()):
         issues.append("INVALID_GST_FORMAT")
     try:
@@ -438,7 +456,8 @@ def main() -> None:
             files = [p for p in inbox.glob("*.pdf") if p.is_file()]
             fresh = [p for p in files if str(p.resolve()) not in processed]
             if fresh:
-                result = process_records(root, discover_pdfs(inbox), Path(args.suppliers) if args.suppliers else None,
+                fresh_records = [{"source_file": p.name} for p in fresh]
+                result = process_records(root, fresh_records, Path(args.suppliers) if args.suppliers else None,
                                           Path(args.database) if args.database else None, args.ocr, args.email)
                 processed.update(str(p.resolve()) for p in fresh)
                 LOG.info("Folder batch completed: %s", result["summary"])
