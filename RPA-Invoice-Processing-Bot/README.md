@@ -46,7 +46,7 @@ pip install -r requirements.txt
 The manifest must contain `source_file` paths. Relative paths resolve under `Input/`.
 
 ```powershell
-python src/invoice_pipeline.py --root . --input data/invoices_demo.csv --suppliers data/suppliers_demo.csv
+python src/invoice_pipeline.py --root . --input data/invoice_manifest_demo.csv --suppliers data/suppliers_demo.csv
 ```
 
 ### Process PDFs from the Input folder
