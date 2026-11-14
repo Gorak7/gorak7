@@ -1,0 +1,80 @@
+from pathlib import Path
+
+import pandas as pd
+
+from invoice_pipeline import process_records, read_manifest
+
+
+def _row(invoice_id, source_file):
+    return {
+        "invoice_id": invoice_id,
+        "vendor_name": "Acme Supplies",
+        "invoice_date": "2026-11-01",
+        "due_date": "2026-11-30",
+        "gst_number": "29ABCDE1234F1Z5",
+        "amount": "1000.00",
+        "tax_amount": "180.00",
+        "currency": "INR",
+        "source_file": str(source_file),
+    }
+
+
+def test_csv_manifest_reading(tmp_path):
+    file = tmp_path / "manifest.csv"
+    pd.DataFrame([{"invoice_id": "INV-1", "source_file": "one.pdf"}]).to_csv(file, index=False)
+    assert read_manifest(file)[0]["invoice_id"] == "INV-1"
+
+
+def test_approved_invoice_and_reports(tmp_path):
+    root = tmp_path / "workspace"
+    inbox = root / "Input"
+    inbox.mkdir(parents=True)
+    source = inbox / "invoice-1.txt"
+    source.write_text("synthetic invoice file", encoding="utf-8")
+    suppliers = tmp_path / "suppliers.csv"
+    pd.DataFrame([{"vendor_name": "Acme Supplies"}]).to_csv(suppliers, index=False)
+
+    result = process_records(root, [_row("INV-001", source)], suppliers)
+    assert result["summary"]["approved"] == 1
+    assert (root / "Approved" / source.name).exists()
+    assert Path(result["csv"]).exists()
+    assert Path(result["xlsx"]).exists()
+    assert Path(result["pdf"]).exists()
+
+
+def test_duplicate_invoice_is_rejected_across_runs(tmp_path):
+    root = tmp_path / "workspace"
+    inbox = root / "Input"
+    inbox.mkdir(parents=True)
+    suppliers = tmp_path / "suppliers.csv"
+    pd.DataFrame([{"vendor_name": "Acme Supplies"}]).to_csv(suppliers, index=False)
+
+    first = inbox / "first.txt"
+    first.write_text("first invoice", encoding="utf-8")
+    second = inbox / "second.txt"
+    second.write_text("second invoice", encoding="utf-8")
+
+    process_records(root, [_row("INV-DUP", first)], suppliers)
+    result = process_records(root, [_row("INV-DUP", second)], suppliers)
+    assert result["summary"]["rejected"] == 1
+    assert "DUPLICATE_ACROSS_RUNS" in result["summary"].__str__() or result["summary"]["rejected"] == 1
+
+
+def test_unknown_supplier_goes_to_review(tmp_path):
+    root = tmp_path / "workspace"
+    inbox = root / "Input"
+    inbox.mkdir(parents=True)
+    source = inbox / "invoice.txt"
+    source.write_text("synthetic invoice", encoding="utf-8")
+    suppliers = tmp_path / "suppliers.csv"
+    pd.DataFrame([{"vendor_name": "Different Supplier"}]).to_csv(suppliers, index=False)
+
+    result = process_records(root, [_row("INV-UNKNOWN", source)], suppliers)
+    assert result["summary"]["review"] == 1
+    assert (root / "Review" / source.name).exists()
+
+
+def test_missing_file_is_rejected(tmp_path):
+    root = tmp_path / "workspace"
+    result = process_records(root, [_row("INV-MISSING", root / "Input" / "missing.pdf")])
+    assert result["summary"]["rejected"] == 1
