@@ -349,17 +349,16 @@ def process_records(root: Path, records: list[dict], suppliers_file: Path | None
                 if source.resolve() != working.resolve():
                     shutil.copy2(source, working)
                 record.file_sha256 = sha256_file(working)
-                if source.suffix.lower() == ".pdf" and not record.invoice_id:
+                if source.suffix.lower() == ".pdf" and any(
+                    not getattr(record, field) for field in ("invoice_id", "vendor_name", "invoice_date", "amount")
+                ):
                     extracted, method = parse_pdf(working, enable_ocr)
                     for key, value in extracted.items():
                         if value and not getattr(record, key): setattr(record, key, value)
                     record.extraction_method = method
-            else:
-                record.decision_reason = "MISSING_SOURCE_FILE_REFERENCE"
-            if record.decision_reason:
-                record.status = "REJECTED"
-            else:
-                record.status, record.decision_reason = validate(record, suppliers, conn, seen)
+            # source_file is optional for structured CSV/XLSX rows. If supplied,
+            # it must exist; missing paths are handled as explicit file errors.
+            record.status, record.decision_reason = validate(record, suppliers, conn, seen)
         except FileNotFoundError as exc:
             record.status, record.decision_reason = "REJECTED", str(exc)
         except Exception as exc:
