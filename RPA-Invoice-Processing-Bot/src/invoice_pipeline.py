@@ -414,8 +414,8 @@ def process_records(root: Path, records: list[dict], suppliers_file: Path | None
             LOG.exception("DATABASE_ERROR for %s", record.invoice_id)
 
         if raw_path and source.exists():
-            target_name = ({"APPROVED": "Approved", "REVIEW": "Review", "REJECTED": "Rejected"}[record.status]
-                           if database_ok else "Exceptions")
+            target_name = ("Exceptions" if (not database_ok or "PDF_EXTRACTION_ERROR" in record.decision_reason)
+                           else {"APPROVED": "Approved", "REVIEW": "Review", "REJECTED": "Rejected"}[record.status])
             destination = root / target_name / source.name
             try:
                 if source.resolve() != destination.resolve():
