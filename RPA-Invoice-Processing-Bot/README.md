@@ -109,11 +109,3 @@ Follow [docs/A360_BUILD_GUIDE.md](docs/A360_BUILD_GUIDE.md) for the task sequenc
 ## Evidence checklist
 
 See [evidence/README.md](evidence/README.md). Capture genuine screenshots from your own A360 run and mask supplier/customer data. Do not upload credentials, real invoices or personal data.
-
-## Reference projects used for workflow design
-
-- [Automation Anywhere A360 bot examples](https://github.com/48Naveenkumar/RPA_AutomationAnywhere_Bots-using-360Tool) — Excel/database, PDF/CSV, email, file and error-handling patterns.
-- [Python invoice bot](https://github.com/efrabuilder/invoice-bot) — PDF extraction, cross-run duplicate checks, batch processing, logs and reports.
-- [UiPath invoice validation example](https://github.com/AhmedAmineKadri/uipath-invoice-validation-bot) and [UiPath PDF processing example](https://github.com/GuntimaduguGrace/UiPath-InvoiceProcessingBot) — approval/review/rejection routing patterns. These are UiPath references, not A360 implementations.
-
-Reference repositories are learning sources; this project is independently implemented and adapted to its own folder, data and code structure.
