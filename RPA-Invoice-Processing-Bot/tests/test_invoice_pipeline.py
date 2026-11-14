@@ -3,10 +3,12 @@ from pathlib import Path
 import pandas as pd
 
 import importlib.util
+import sys
 
 MODULE_PATH = Path(__file__).parents[1] / "src" / "invoice_pipeline.py"
 SPEC = importlib.util.spec_from_file_location("invoice_pipeline", MODULE_PATH)
 invoice_pipeline = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = invoice_pipeline
 SPEC.loader.exec_module(invoice_pipeline)
 process_records = invoice_pipeline.process_records
 read_manifest = invoice_pipeline.read_manifest
