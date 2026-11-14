@@ -438,10 +438,19 @@ def process_records(root: Path, records: list[dict], suppliers_file: Path | None
     return report
 
 
-def discover_pdfs(folder: Path) -> list[dict]:
+def discover_folder_records(folder: Path) -> list[dict]:
     if not folder.exists():
         raise FileNotFoundError(f"Input folder does not exist: {folder}")
-    return [{"source_file": path.name} for path in sorted(folder.glob("*.pdf")) if path.is_file()]
+    records: list[dict] = []
+    for path in sorted(folder.iterdir()):
+        if not path.is_file():
+            continue
+        suffix = path.suffix.lower()
+        if suffix == ".pdf":
+            records.append({"source_file": path.name})
+        elif suffix in {".csv", ".xlsx", ".xls"}:
+            records.extend(read_manifest(path))
+    return records
 
 
 def run_once(args) -> dict:
@@ -450,7 +459,7 @@ def run_once(args) -> dict:
     if input_path.is_file():
         records = read_manifest(input_path)
     else:
-        records = discover_pdfs(input_path)
+        records = discover_folder_records(input_path)
     return process_records(root, records, Path(args.suppliers) if args.suppliers else None,
                            Path(args.database) if args.database else None,
                            args.ocr, args.email)
@@ -477,14 +486,21 @@ def main() -> None:
     processed: set[str] = set()
     try:
         while True:
-            files = [p for p in inbox.glob("*.pdf") if p.is_file()]
+            files = [p for p in inbox.iterdir() if p.is_file() and p.suffix.lower() in {".pdf", ".csv", ".xlsx", ".xls"}]
             fresh = [p for p in files if str(p.resolve()) not in processed]
-            if fresh:
-                fresh_records = [{"source_file": p.name} for p in fresh]
-                result = process_records(root, fresh_records, Path(args.suppliers) if args.suppliers else None,
-                                          Path(args.database) if args.database else None, args.ocr, args.email)
-                processed.update(str(p.resolve()) for p in fresh)
-                LOG.info("Folder batch completed: %s", result["summary"])
+            for path in fresh:
+                if path.suffix.lower() == ".pdf":
+                    records = [{"source_file": path.name}]
+                else:
+                    records = read_manifest(path)
+                if records:
+                    result = process_records(root, records, Path(args.suppliers) if args.suppliers else None,
+                                              Path(args.database) if args.database else None, args.ocr, args.email)
+                    LOG.info("Folder batch completed: %s", result["summary"])
+                if path.suffix.lower() in {".csv", ".xlsx", ".xls"} and path.exists():
+                    archive = root / "Processed" / f"manifest_{uuid.uuid4().hex[:8]}_{path.name}"
+                    shutil.move(str(path), str(archive))
+                processed.add(str(path.resolve()))
             time.sleep(max(2, args.interval))
     except KeyboardInterrupt:
         LOG.info("Folder watcher stopped by user")
