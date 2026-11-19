@@ -13,6 +13,9 @@ on:
       - '.github/workflows/data-analyst-project-tests.yml'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   carbon-analysis:
     runs-on: ubuntu-latest
@@ -28,6 +31,15 @@ jobs:
       - run: python src/generate_data.py
       - run: python src/analyze_sustainability.py
       - run: python -m unittest discover -s tests -v
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: carbon-sustainability-analysis
+          path: |
+            Carbon-Emissions-Solar-PV-Performance-Analysis/outputs/
+            Carbon-Emissions-Solar-PV-Performance-Analysis/data/
+          if-no-files-found: warn
+          retention-days: 14
 
   energy-analysis:
     runs-on: ubuntu-latest
@@ -43,3 +55,12 @@ jobs:
       - run: python src/generate_data.py
       - run: python src/analyze_energy.py
       - run: python -m unittest discover -s tests -v
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: energy-forecasting-anomaly-analysis
+          path: |
+            Energy-Consumption-Forecasting-Anomaly-Detection/outputs/
+            Energy-Consumption-Forecasting-Anomaly-Detection/data/
+          if-no-files-found: warn
+          retention-days: 14
