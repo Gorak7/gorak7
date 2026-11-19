@@ -8,7 +8,7 @@ A reproducible Python + SQL project for facility-level electricity and water ana
 - Synthetic daily readings for multiple facilities.
 - Data-quality checks for missing values, duplicate records, invalid dates, non-positive consumption, and retained/rejected row counts.
 - Rolling-median / median-absolute-deviation anomaly flags using prior observations only, including a documented zero-MAD fallback.
-- Site-level chronological holdout evaluation with a 7-day seasonal-naive forecasting baseline.
+- Site-level chronological holdout evaluation comparing 7-day seasonal-naive and 7-day trailing-mean forecasting baselines.
 - MAE, RMSE, and MAPE metrics per site, charts, CSV outputs, and SQLite tables.
 
 ## Structure
