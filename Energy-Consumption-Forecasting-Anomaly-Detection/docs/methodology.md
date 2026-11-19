@@ -1,19 +1,21 @@
 # Methodology and assumptions
 
 ## Data dictionary
-- date: daily date for a synthetic reading.
-- site_id: stable facility identifier.
-- electricity_kwh: daily electricity consumption in kWh.
-- water_m3: daily water consumption in cubic metres.
+- `date`: daily date for a synthetic reading.
+- `site_id`: stable facility identifier.
+- `electricity_kwh`: daily electricity consumption in kWh.
+- `water_m3`: daily water consumption in cubic metres.
 
-## Quality rules
-The script reports missing/invalid values and duplicate date/site keys, then excludes rows missing required fields, duplicate keys, and non-positive values. In real facilities, zero can be valid; investigate before excluding it.
+## Data quality
+The analysis reports invalid dates, missing required values, duplicate date/site keys, and non-positive readings. It retains the first record for each date/site key and excludes invalid or incomplete rows. The report includes input, retained, and rejected row counts. In a real facility, a zero reading may be valid; investigate it before excluding it.
 
 ## Anomaly detection
-For each site and metric, calculate a rolling median from up to 28 prior observations and a median absolute deviation (MAD). Scale MAD by 1.4826 and flag absolute robust z-scores >= 3.5. At least 14 prior observations are required. Zero MAD results in an undefined score and no flag.
+For each site and metric, the script calculates a rolling median from up to 28 prior observations and a median absolute deviation (MAD). The scaled MAD is 1.4826 × MAD; absolute robust z-scores of 3.5 or higher are flagged. At least 14 prior observations are required. If the prior window has zero MAD, a non-zero deviation from the constant median is flagged for investigation. This fallback can be sensitive and should be reviewed with operational context.
 
 ## Forecasting
-A 7-day seasonal-naive forecast predicts each holdout day using the value seven days earlier. The last 20% of the chronological series is held out. MAE and RMSE measure errors in kWh; MAPE is unstable around zero. This is a baseline, not a claim of best model performance.
+A 7-day seasonal-naive baseline predicts each site’s holdout day using the value seven days earlier. The final 20% of each site’s chronological daily series is held out. Short gaps of up to two days are interpolated; longer gaps are excluded from the continuous series. MAE and RMSE measure errors in kWh; MAPE excludes zero actuals and can be unstable near zero. This is a baseline, not a claim of best model performance.
 
-## Operational cautions
-Alerts require investigation. Check operating hours, weather, occupancy, maintenance, meter accuracy, billing periods, and facility changes before recommending action. Use walk-forward validation and contextual features for production forecasting.
+## Outputs and interpretation
+Forecast metrics are reported separately for each site. Anomaly charts show site-level readings and flags on the same scale. Alerts are investigation signals, not proof of waste or equipment failure. Check operating hours, weather, occupancy, maintenance, meter accuracy, billing periods, and facility changes before recommending action.
+
+For production forecasting, compare multiple baselines, use walk-forward validation, and consider contextual features.
