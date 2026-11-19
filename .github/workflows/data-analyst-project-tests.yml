@@ -1,0 +1,45 @@
+name: Project tests
+
+on:
+  push:
+    paths:
+      - 'Carbon-Emissions-Solar-PV-Performance-Analysis/**'
+      - 'Energy-Consumption-Forecasting-Anomaly-Detection/**'
+      - '.github/workflows/data-analyst-project-tests.yml'
+  pull_request:
+    paths:
+      - 'Carbon-Emissions-Solar-PV-Performance-Analysis/**'
+      - 'Energy-Consumption-Forecasting-Anomaly-Detection/**'
+      - '.github/workflows/data-analyst-project-tests.yml'
+  workflow_dispatch:
+
+jobs:
+  carbon-analysis:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Carbon-Emissions-Solar-PV-Performance-Analysis
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: python src/generate_data.py
+      - run: python src/analyze_sustainability.py
+      - run: python -m unittest discover -s tests -v
+
+  energy-analysis:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Energy-Consumption-Forecasting-Anomaly-Detection
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: python src/generate_data.py
+      - run: python src/analyze_energy.py
+      - run: python -m unittest discover -s tests -v
