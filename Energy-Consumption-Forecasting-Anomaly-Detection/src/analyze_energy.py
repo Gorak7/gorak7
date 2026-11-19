@@ -88,7 +88,7 @@ def clean_readings(raw: pd.DataFrame):
 
 
 def build_site_forecasts(clean: pd.DataFrame):
-    """Create a chronological 80/20 holdout and 7-day seasonal-naive forecast per site."""
+    """Compare seasonal-naive and trailing-mean baselines on each site's chronological holdout."""
     forecasts = []
     metric_rows = []
     for site, group in clean.groupby("site_id"):
@@ -102,15 +102,29 @@ def build_site_forecasts(clean: pd.DataFrame):
         if len(daily) < 35:
             continue
         split = int(len(daily) * 0.8)
-        test = daily.iloc[split:].to_frame("actual_kwh")
-        test["forecast_kwh"] = daily.shift(7).reindex(test.index)
-        test = test.dropna()
-        test["site_id"] = site
-        forecasts.append(test.reset_index())
-        metrics = calculate_forecast_metrics(test["actual_kwh"], test["forecast_kwh"])
-        metric_rows.append({"site_id": site, "model": "7-day seasonal naive", **metrics})
+        test_index = daily.index[split:]
+        actual = daily.reindex(test_index)
+        model_predictions = {
+            "7-day seasonal naive": daily.shift(7).reindex(test_index),
+            "7-day trailing mean": daily.shift(1).rolling(7, min_periods=7).mean().reindex(test_index),
+        }
+        for model_name, prediction in model_predictions.items():
+            result = pd.DataFrame({
+                "date": test_index,
+                "actual_kwh": actual.to_numpy(),
+                "forecast_kwh": prediction.to_numpy(),
+                "site_id": site,
+                "model": model_name,
+            }).dropna(subset=["actual_kwh", "forecast_kwh"])
+            if result.empty:
+                continue
+            forecasts.append(result)
+            metrics = calculate_forecast_metrics(
+                result["actual_kwh"], result["forecast_kwh"]
+            )
+            metric_rows.append({"site_id": site, "model": model_name, **metrics})
     if not forecasts:
-        raise ValueError("No site has enough daily history for a 7-day holdout forecast.")
+        raise ValueError("No site has enough daily history for the forecast holdout.")
     return pd.concat(forecasts, ignore_index=True), pd.DataFrame(metric_rows)
 
 
@@ -172,8 +186,11 @@ def main():
     fig, axes = plt.subplots(len(sites), 1, figsize=(11, max(4, 3 * len(sites))), squeeze=False)
     for ax, site in zip(axes[:, 0], sites):
         site_forecast = forecasts[forecasts["site_id"] == site]
-        ax.plot(site_forecast["date"], site_forecast["actual_kwh"], label="Actual")
-        ax.plot(site_forecast["date"], site_forecast["forecast_kwh"], label="7-day baseline")
+        actual = site_forecast.drop_duplicates("date").sort_values("date")
+        ax.plot(actual["date"], actual["actual_kwh"], label="Actual", linewidth=1.5)
+        for model_name, model_rows in site_forecast.groupby("model"):
+            model_rows = model_rows.sort_values("date")
+            ax.plot(model_rows["date"], model_rows["forecast_kwh"], label=model_name, alpha=0.85)
         ax.set_title(site)
         ax.set_ylabel("kWh")
         ax.legend()
