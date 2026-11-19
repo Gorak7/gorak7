@@ -54,7 +54,7 @@ python -m unittest discover -s tests -v
 1. Validate and clean records; deduplicate date/site combinations.
 2. Calculate rolling median and robust z-score using prior readings only.
 3. Flag absolute robust z-scores >= 3.5 after at least 14 prior observations; when MAD is zero, flag non-zero deviations for review.
-4. Forecast each site's held-out period using consumption from seven days earlier.
+4. Forecast each site's held-out period using both consumption from seven days earlier and the trailing seven-day mean; compare per-site metrics.
 5. Evaluate with MAE, RMSE, and MAPE; store analysis tables in SQLite.
 
 An anomaly is an investigation signal, not proof of wastage or equipment failure. Consider operating hours, weather, occupancy, meter quality, and maintenance before drawing conclusions. Compare other forecasting baselines before selecting a model for operational use.
