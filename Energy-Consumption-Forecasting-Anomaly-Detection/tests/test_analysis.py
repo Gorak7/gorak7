@@ -48,6 +48,10 @@ class EnergyAnalysisTests(unittest.TestCase):
         forecasts, metrics = build_site_forecasts(pd.DataFrame(rows))
         self.assertEqual(set(metrics["site_id"]), {"A", "B"})
         self.assertEqual(set(forecasts["site_id"]), {"A", "B"})
+        self.assertEqual(
+            set(metrics["model"]),
+            {"7-day seasonal naive", "7-day trailing mean"},
+        )
 
 
 if __name__ == "__main__":
